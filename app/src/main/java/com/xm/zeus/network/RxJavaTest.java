@@ -1,16 +1,15 @@
 package com.xm.zeus.network;
 
 import com.xm.zeus.db.user.entity.User;
-import com.xm.zeus.network.extend.ApiException;
 
-import java.io.Serializable;
-import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import rx.Notification;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
@@ -548,14 +547,532 @@ public class RxJavaTest {
 
     // 异常处理 Error Handling http://blog.chinaunix.net/uid-20771867-id-5201914.html
 
-    private static void method() {
+    private static void onErrorReturn() {
+        Observable
+                .create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        for (int i = 0; i < 2; i++) {
+                            if (i > 0) {
+                                subscriber.onError(new Throwable("i > 0 Error"));
+                            } else {
+                                subscriber.onNext(i);
+                            }
+                        }
+                    }
+                })
+                .onErrorReturn(new Func1<Throwable, Integer>() {
+                    @Override
+                    public Integer call(Throwable throwable) {
+                        return 100;
+                    }
+                })
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+
+    }
+
+    private static void onErrorResumeNext() {
+        Observable
+                .create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        for (int i = 0; i < 2; i++) {
+                            if (i > 0) {
+                                subscriber.onError(new Throwable("i > 0 Error"));
+                            } else {
+                                subscriber.onNext(i);
+                            }
+                        }
+                    }
+                })
+                .onErrorResumeNext(new Func1<Throwable, Observable<? extends Integer>>() {
+                    @Override
+                    public Observable<? extends Integer> call(Throwable throwable) {
+                        return Observable.just(100);
+                    }
+                })
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+    }
+
+    private static void onExceptionResumeNext() {
+        Observable
+                .create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        for (int i = 0; i < 2; i++) {
+                            if (i > 0) {
+                                // 如果Throw Exception 则触发onExceptionResumeNext里面的Observable，否则触发Subscriber.onError
+
+//                                subscriber.onError(new Throwable(i + " > 0 Error")); // Subscriber.onError
+
+                                subscriber.onError(new NullPointerException(i + " > 0 Error")); // Observable.onExceptionResumeNext
+                            } else {
+                                subscriber.onNext(i);
+                            }
+                        }
+                    }
+                })
+                .onExceptionResumeNext(Observable.just(100))
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+    }
+
+    private static void retry() {
+        Observable
+                .create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        for (int i = 0; i < 3; i++) {
+                            if (i == 2) {
+                                subscriber.onError(new Throwable("Error i == 2"));
+                            } else {
+                                subscriber.onNext(i);
+                            }
+                        }
+                    }
+                })
+                .retry(2)
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+    }
+
+    private static void retryWhen() {
+        Observable
+                .create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        for (int i = 0; i < 3; i++) {
+                            if (i == 2) {
+                                subscriber.onError(new Throwable("Error i == 2"));
+                            } else {
+                                subscriber.onNext(i);
+                            }
+                        }
+                    }
+                })
+                .retryWhen(new Func1<Observable<? extends Throwable>, Observable<?>>() {
+                    @Override
+                    public Observable<?> call(Observable<? extends Throwable> observable) {
+                        return observable.zipWith(Observable.just(1, 2, 3), new Func2<Throwable, Integer, Integer>() {
+                            @Override
+                            public Integer call(Throwable throwable, Integer integer) {
+                                return 100;
+                            }
+                        });
+                    }
+                })
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+    }
+
+    // 其他工具类的操作 http://blog.chinaunix.net/uid-20771867-id-5206187.html
+
+    private static void delay() {
+
+        Observable.just(1, 2, 3)
+                .delay(2, TimeUnit.SECONDS)
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+
+    }
+
+    private static void delaySubscription() {
+
+        Observable.just(1, 2, 3)
+                .delaySubscription(2, TimeUnit.SECONDS)
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+
+    }
+
+    private static void dooComplete() {
+        Observable.just(1, 2, 3)
+                .doOnEach(new Action1<Notification<? super Integer>>() {
+                    @Override
+                    public void call(Notification<? super Integer> notification) {
+                        System.out.println("doOnEach kind = " + notification.getKind() + " ' value = " + notification.getValue());
+                    }
+                })
+                .doOnNext(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println("doOnNext " + integer);
+                    }
+                })
+                .doOnCompleted(new Action0() {
+                    @Override
+                    public void call() {
+                        System.out.println("doOnCompleted");
+                    }
+                })
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        System.out.println("doOnSubscribe");
+                    }
+                })
+                .doOnUnsubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        System.out.println("doOnUnsubscribe");
+                    }
+                })
+                .doOnTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        System.out.println("doOnTerminate");
+                    }
+                })
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+    }
+
+    private static void dooError() {
+        Observable
+                .create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        for (int i = 0; i < 3; i++) {
+                            if (i == 2) {
+                                subscriber.onError(new Throwable("Error i == 2"));
+                            } else {
+                                subscriber.onNext(i);
+                            }
+                        }
+                    }
+                })
+                .doOnEach(new Action1<Notification<? super Integer>>() {
+                    @Override
+                    public void call(Notification<? super Integer> notification) {
+                        System.out.println("doOnEach kind = " + notification.getKind() + " ' value = " + notification.getValue());
+                    }
+                })
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        System.out.println("doOnError " + throwable.toString());
+                    }
+                })
+                .doOnTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        System.out.println("doOnTerminate");
+                    }
+                })
+                .doAfterTerminate(new Action0() {
+                    @Override
+                    public void call() {
+                        System.out.println("doAfterTerminate");
+                    }
+                })
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+
+    }
+
+    private static void timeout() {
+        Observable
+                .create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        for (int i = 0; i <= 3; i++) {
+                            try {
+                                Thread.sleep(i * 100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            subscriber.onNext(i);
+                        }
+                        subscriber.onCompleted();
+                    }
+                })
+                .timeout(200, TimeUnit.MILLISECONDS, Observable.just(8, 9))
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+    }
+
+    // 条件 Conditional and Boolean http://blog.chinaunix.net/uid-20771867-id-5208237.html
+
+    private static void all() {
+        // 集合中所有元素同时满足某个条件的时候 返回true，否则false 相当于&&
+        Observable.just(1, 2, 3).all(new Func1<Integer, Boolean>() {
+            @Override
+            public Boolean call(Integer integer) {
+                return integer < 3;
+            }
+        }).subscribe(new Action1<Boolean>() {
+            @Override
+            public void call(Boolean aBoolean) {
+                System.out.println("onNext " + aBoolean);
+            }
+        });
+    }
+
+    private static void amb() {
+        Observable<Integer> ob1 = Observable.just(1, 2, 3).delay(3, TimeUnit.SECONDS);
+        Observable<Integer> ob2 = Observable.just(4, 5, 6).delay(2, TimeUnit.SECONDS);
+        Observable<Integer> ob3 = Observable.just(7, 8, 9).delay(1, TimeUnit.SECONDS);
+
+        Observable.amb(ob1, ob2, ob3)
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println("onNext " + integer);
+                    }
+                });
+
+    }
+
+    private static void contains() {
+        Observable.just(1, 2, 3).contains(2)
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean integer) {
+                        System.out.println("onNext " + integer);
+                    }
+                });
+    }
+
+    private static void isEmpty() {
+        Observable
+                .create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        subscriber.onCompleted();
+                    }
+                }).isEmpty()
+                .subscribe(new Subscriber<Boolean>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Boolean integer) {
+                        System.out.println(integer);
+                    }
+                });
+    }
+
+    private static void defaultEmpty() {
+        Observable
+                .create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        subscriber.onCompleted();
+                    }
+                }).defaultIfEmpty(100)
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+    }
+
+    private static void sequenceEqual() {
+        // 判断是否为完全相同的序列
+        Observable<Integer> ob1 = Observable.just(1, 2, 3);
+        Observable<Integer> ob2 = Observable.just(1, 2, 3);
+
+        Observable.sequenceEqual(ob1, ob2)
+                .subscribe(new Action1<Boolean>() {
+                    @Override
+                    public void call(Boolean aBoolean) {
+                        System.out.println("onNext " + aBoolean);
+                    }
+                });
+
+    }
+
+    private static void skipWhile() {
+        Observable.just(1, 2, 3, 4, 5)
+                .skipWhile(new Func1<Integer, Boolean>() {
+                    @Override
+                    public Boolean call(Integer integer) {
+                        return integer <= 3;
+                    }
+                })
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println("onNext " + integer);
+                    }
+                });
+    }
+
+    private static void skipUntil() {
+        Observable.just(1, 2, 3, 4, 5)
+                .skipUntil(Observable.just(1, 2, 3))
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println("onNext " + integer);
+                    }
+                });
     }
 
 
     public static void main(String[] args) {
 
-        zipWith();
+        skipUntil();
     }
 
 
