@@ -1,5 +1,10 @@
 package com.xm.zeus.network;
 
+import com.xm.zeus.db.user.entity.User;
+import com.xm.zeus.network.extend.ApiException;
+
+import java.io.Serializable;
+import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -394,6 +399,155 @@ public class RxJavaTest {
                 });
     }
 
+    // 合并 Observable http://blog.chinaunix.net/uid-20771867-id-5197584.html
+
+    /**
+     * 将多个Observable合并
+     */
+    private static void merge() {
+        Observable<User> ob2 = Observable.create(new Observable.OnSubscribe<User>() {
+            @Override
+            public void call(Subscriber<? super User> subscriber) {
+
+                User user = new User();
+                user.setUserId("111");
+                subscriber.onNext(user);
+                user.setUserId("222");
+                subscriber.onNext(user);
+
+            }
+        });
+        Observable<Integer> ob1 = Observable.create(new Observable.OnSubscribe<Integer>() {
+            @Override
+            public void call(Subscriber<? super Integer> subscriber) {
+                for (int i = 1; i < 5; i++) {
+                    if (i % 2 == 0) {
+                        subscriber.onNext(i);
+                    } else {
+                        subscriber.onError(new Throwable(i + "不是偶数"));
+                    }
+                }
+            }
+        });
+
+        System.out.println("----------Observable.merge");
+
+        Observable.merge(ob1, ob2)
+                .subscribe(new Subscriber<Object>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+                        if (o instanceof User) {
+                            System.out.println("User " + ((User) o).getUserId());
+                        } else {
+                            System.out.println(o);
+                        }
+                    }
+                });
+
+        System.out.println("----------Observable.mergeDelayError");
+        Observable.mergeDelayError(ob1, ob2)
+                .subscribe(new Subscriber<Object>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+                        if (o instanceof User) {
+                            System.out.println("User " + ((User) o).getUserId());
+                        } else {
+                            System.out.println(o);
+                        }
+                    }
+                });
+
+        System.out.println("----------Observable.concat");
+        Observable.concat(ob1, ob2)
+                .subscribe(new Subscriber<Object>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+                        if (o instanceof User) {
+                            System.out.println("User " + ((User) o).getUserId());
+                        } else {
+                            System.out.println(o);
+                        }
+                    }
+                });
+
+    }
+
+    private static void startWith() {
+        Observable.just(1, 2, 3).startWith(-1, 0)
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+    }
+
+    private static void zip() {
+        Observable<Integer> ob1 = Observable.just(1, 2, 3);
+        Observable<String> ob2 = Observable.just("A", "B", "C", "D");
+
+        Observable.zip(ob1, ob2, new Func2<Integer, String, String>() {
+            @Override
+            public String call(Integer integer, String s) {
+                return "ob1." + integer + " , ob2." + s;
+            }
+        }).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                System.out.println(s);
+            }
+        });
+    }
+
+    private static void zipWith() {
+        Observable<Integer> ob1 = Observable.just(1, 2, 3);
+        Observable<String> ob2 = Observable.just("A", "B", "C", "D");
+
+        ob1.zipWith(ob2, new Func2<Integer, String, String>() {
+            @Override
+            public String call(Integer integer, String s) {
+                return "ob1." + integer + " , ob2." + s;
+            }
+        }).subscribe(new Action1<String>() {
+            @Override
+            public void call(String s) {
+                System.out.println(s);
+            }
+        });
+    }
+
+    // 异常处理 Error Handling http://blog.chinaunix.net/uid-20771867-id-5201914.html
+
     private static void method() {
 
     }
@@ -401,7 +555,7 @@ public class RxJavaTest {
 
     public static void main(String[] args) {
 
-        throttleFirst();
+        zipWith();
     }
 
 
