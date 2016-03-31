@@ -25,6 +25,7 @@ public class DaoMaster extends AbstractDaoMaster {
         GroupDao.createTable(db, ifNotExists);
         GroupMemberIdDao.createTable(db, ifNotExists);
         TimeStampDao.createTable(db, ifNotExists);
+        OrgDao.createTable(db, ifNotExists);
     }
     
     /** Drops underlying database table using DAOs. */
@@ -35,6 +36,7 @@ public class DaoMaster extends AbstractDaoMaster {
         GroupDao.dropTable(db, ifExists);
         GroupMemberIdDao.dropTable(db, ifExists);
         TimeStampDao.dropTable(db, ifExists);
+        OrgDao.dropTable(db, ifExists);
     }
     
     public static abstract class OpenHelper extends SQLiteOpenHelper {
@@ -72,6 +74,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(GroupDao.class);
         registerDaoClass(GroupMemberIdDao.class);
         registerDaoClass(TimeStampDao.class);
+        registerDaoClass(OrgDao.class);
     }
     
     public DaoSession newSession() {

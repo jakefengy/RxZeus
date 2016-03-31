@@ -7,6 +7,7 @@ import com.xm.zeus.db.app.entity.ColleagueDept;
 import com.xm.zeus.db.app.entity.Friend;
 import com.xm.zeus.db.app.entity.Group;
 import com.xm.zeus.db.app.entity.GroupMemberId;
+import com.xm.zeus.db.app.entity.Org;
 import com.xm.zeus.db.app.entity.TimeStamp;
 
 import java.util.Map;
@@ -31,6 +32,7 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig groupDaoConfig;
     private final DaoConfig groupMemberIdDaoConfig;
     private final DaoConfig timeStampDaoConfig;
+    private final DaoConfig orgDaoConfig;
 
     private final ColleagueDao colleagueDao;
     private final ColleagueDeptDao colleagueDeptDao;
@@ -38,6 +40,7 @@ public class DaoSession extends AbstractDaoSession {
     private final GroupDao groupDao;
     private final GroupMemberIdDao groupMemberIdDao;
     private final TimeStampDao timeStampDao;
+    private final OrgDao orgDao;
 
     public DaoSession(SQLiteDatabase db, IdentityScopeType type, Map<Class<? extends AbstractDao<?, ?>>, DaoConfig>
             daoConfigMap) {
@@ -61,12 +64,16 @@ public class DaoSession extends AbstractDaoSession {
         timeStampDaoConfig = daoConfigMap.get(TimeStampDao.class).clone();
         timeStampDaoConfig.initIdentityScope(type);
 
+        orgDaoConfig = daoConfigMap.get(OrgDao.class).clone();
+        orgDaoConfig.initIdentityScope(type);
+
         colleagueDao = new ColleagueDao(colleagueDaoConfig, this);
         colleagueDeptDao = new ColleagueDeptDao(colleagueDeptDaoConfig, this);
         friendDao = new FriendDao(friendDaoConfig, this);
         groupDao = new GroupDao(groupDaoConfig, this);
         groupMemberIdDao = new GroupMemberIdDao(groupMemberIdDaoConfig, this);
         timeStampDao = new TimeStampDao(timeStampDaoConfig, this);
+        orgDao = new OrgDao(orgDaoConfig, this);
 
         registerDao(Colleague.class, colleagueDao);
         registerDao(ColleagueDept.class, colleagueDeptDao);
@@ -74,6 +81,7 @@ public class DaoSession extends AbstractDaoSession {
         registerDao(Group.class, groupDao);
         registerDao(GroupMemberId.class, groupMemberIdDao);
         registerDao(TimeStamp.class, timeStampDao);
+        registerDao(Org.class, orgDao);
     }
     
     public void clear() {
@@ -83,6 +91,7 @@ public class DaoSession extends AbstractDaoSession {
         groupDaoConfig.getIdentityScope().clear();
         groupMemberIdDaoConfig.getIdentityScope().clear();
         timeStampDaoConfig.getIdentityScope().clear();
+        orgDaoConfig.getIdentityScope().clear();
     }
 
     public ColleagueDao getColleagueDao() {
@@ -107,6 +116,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public TimeStampDao getTimeStampDao() {
         return timeStampDao;
+    }
+
+    public OrgDao getOrgDao() {
+        return orgDao;
     }
 
 }

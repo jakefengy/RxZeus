@@ -20,7 +20,7 @@ public class User {
     private String Password;
     private String Token;
     private String Status;
-    private Boolean IsAutoLogin;
+    private Boolean Logged;
     private Long LoggedDate;
 
     /** Used to resolve relations */
@@ -40,13 +40,13 @@ public class User {
         this.UserId = UserId;
     }
 
-    public User(String UserId, String UserName, String Password, String Token, String Status, Boolean IsAutoLogin, Long LoggedDate) {
+    public User(String UserId, String UserName, String Password, String Token, String Status, Boolean Logged, Long LoggedDate) {
         this.UserId = UserId;
         this.UserName = UserName;
         this.Password = Password;
         this.Token = Token;
         this.Status = Status;
-        this.IsAutoLogin = IsAutoLogin;
+        this.Logged = Logged;
         this.LoggedDate = LoggedDate;
     }
 
@@ -96,12 +96,12 @@ public class User {
         this.Status = Status;
     }
 
-    public Boolean getIsAutoLogin() {
-        return IsAutoLogin;
+    public Boolean getLogged() {
+        return Logged;
     }
 
-    public void setIsAutoLogin(Boolean IsAutoLogin) {
-        this.IsAutoLogin = IsAutoLogin;
+    public void setLogged(Boolean Logged) {
+        this.Logged = Logged;
     }
 
     public Long getLoggedDate() {

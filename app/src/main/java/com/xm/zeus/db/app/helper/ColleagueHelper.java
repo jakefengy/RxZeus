@@ -44,7 +44,11 @@ public class ColleagueHelper extends BaseHelper {
             personDao.update(person);
         }
 
-        personDeptDao.getDatabase().execSQL("delete from " + ColleagueDeptDao.TABLENAME + " where " + ColleagueDeptDao.Properties.PersonId.columnName + " = '" + person.getUid() + "'");
+        personDeptDao.queryBuilder()
+                .where(ColleagueDeptDao.Properties.PersonId.eq(person.getUid()))
+                .buildDelete()
+                .executeDeleteWithoutDetachingEntities();
+
         List<ColleagueDept> depts = person.getPersonDepts();
         if (depts != null && depts.size() > 0) {
             for (ColleagueDept dept : depts) {

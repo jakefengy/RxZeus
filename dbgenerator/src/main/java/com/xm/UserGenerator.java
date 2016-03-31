@@ -2,9 +2,7 @@ package com.xm;
 
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
-import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
-import de.greenrobot.daogenerator.ToMany;
 
 /**
  * Generator GreenDao
@@ -17,7 +15,7 @@ public class UserGenerator {
 
         Schema schema = new Schema(1, "com.xm.zeus.db.user.entity");
 
-        addBizTimeStamp(schema);
+        addUser(schema);
 
         schema.setDefaultJavaPackageDao("com.xm.zeus.db.user.dao");
         schema.enableKeepSectionsByDefault();
@@ -26,11 +24,11 @@ public class UserGenerator {
     }
 
     /**
-     * TimeStamp
+     * User
      *
      * @param schema
      */
-    private static void addBizTimeStamp(Schema schema) {
+    private static void addUser(Schema schema) {
         Entity user = schema.addEntity("User");
 
         user.setTableName("User");
@@ -39,7 +37,7 @@ public class UserGenerator {
         user.addStringProperty("Password");
         user.addStringProperty("Token");
         user.addStringProperty("Status");
-        user.addBooleanProperty("IsAutoLogin");
+        user.addBooleanProperty("Logged");
         user.addLongProperty("LoggedDate");
     }
 

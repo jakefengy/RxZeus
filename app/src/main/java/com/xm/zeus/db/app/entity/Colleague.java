@@ -1,7 +1,9 @@
 package com.xm.zeus.db.app.entity;
 
 import java.util.List;
+
 import com.xm.zeus.db.app.dao.DaoSession;
+
 import de.greenrobot.dao.DaoException;
 
 import com.xm.zeus.db.app.dao.ColleagueDao;
@@ -11,10 +13,13 @@ import com.xm.zeus.db.app.dao.ColleagueDeptDao;
 
 // KEEP INCLUDES - put your custom includes here
 // KEEP INCLUDES END
+
 /**
  * Entity mapped to table "Colleague".
  */
 public class Colleague {
+
+    public final static int DATATYPE_COLLEAGUE = 0;
 
     private String uid;
     private String uno;
@@ -26,20 +31,25 @@ public class Colleague {
     private Integer type;
     private String spelling;
     private String firstletter;
-    private Integer dataType;
-    private String headName;
-    private Boolean isCheck;
+    private Integer dataType = DATATYPE_COLLEAGUE;
+    private String headName = "同事";
+    private Boolean isCheck = false;
     private Long timestamp;
 
-    /** Used to resolve relations */
+    /**
+     * Used to resolve relations
+     */
     private transient DaoSession daoSession;
 
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     private transient ColleagueDao myDao;
 
     private List<ColleagueDept> personDepts;
 
     // KEEP FIELDS - put your custom fields here
+    private boolean Enabled = true;
     // KEEP FIELDS END
 
     public Colleague() {
@@ -66,7 +76,9 @@ public class Colleague {
         this.timestamp = timestamp;
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getColleagueDao() : null;
@@ -184,7 +196,25 @@ public class Colleague {
         this.timestamp = timestamp;
     }
 
-    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public boolean isEnabled() {
+        return Enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        Enabled = enabled;
+    }
+
+    public Boolean getCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(Boolean check) {
+        isCheck = check;
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity.
+     */
     public List<ColleagueDept> getPersonDepts() {
         if (personDepts == null) {
             if (daoSession == null) {
@@ -193,7 +223,7 @@ public class Colleague {
             ColleagueDeptDao targetDao = daoSession.getColleagueDeptDao();
             List<ColleagueDept> personDeptsNew = targetDao._queryColleague_PersonDepts(uid);
             synchronized (this) {
-                if(personDepts == null) {
+                if (personDepts == null) {
                     personDepts = personDeptsNew;
                 }
             }
@@ -201,32 +231,40 @@ public class Colleague {
         return personDepts;
     }
 
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    /**
+     * Resets a to-many relationship, making the next get call to query for a fresh result.
+     */
     public synchronized void resetPersonDepts() {
         personDepts = null;
     }
 
-    /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */
+    /**
+     * Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context.
+     */
     public void delete() {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
-        }    
+        }
         myDao.delete(this);
     }
 
-    /** Convenient call for {@link AbstractDao#update(Object)}. Entity must attached to an entity context. */
+    /**
+     * Convenient call for {@link AbstractDao#update(Object)}. Entity must attached to an entity context.
+     */
     public void update() {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
-        }    
+        }
         myDao.update(this);
     }
 
-    /** Convenient call for {@link AbstractDao#refresh(Object)}. Entity must attached to an entity context. */
+    /**
+     * Convenient call for {@link AbstractDao#refresh(Object)}. Entity must attached to an entity context.
+     */
     public void refresh() {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
-        }    
+        }
         myDao.refresh(this);
     }
 

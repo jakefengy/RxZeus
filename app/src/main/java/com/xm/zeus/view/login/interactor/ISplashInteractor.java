@@ -10,14 +10,6 @@ import com.xm.zeus.network.extend.CancelSubscriber;
  */
 public interface ISplashInteractor {
 
-    interface InitListener {
-        void onStart();
-
-        void onComplete();
-
-        void onFail();
-    }
-
     void initAppDB(Context context);
 
     void initGallery();

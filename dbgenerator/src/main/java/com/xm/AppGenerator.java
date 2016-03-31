@@ -21,6 +21,7 @@ public class AppGenerator {
         addFriend(schema);
         addGroupAndMembers(schema);
         addTimeStamp(schema);
+        addOrg(schema);
 
         schema.setDefaultJavaPackageDao("com.xm.zeus.db.app.dao");
         schema.enableKeepSectionsByDefault();
@@ -135,6 +136,20 @@ public class AppGenerator {
         timeStamp.setTableName("TimeStamp");
         timeStamp.addStringProperty("ModuleName").primaryKey();
         timeStamp.addLongProperty("TimeStamp").notNull();
+    }
+
+    /**
+     * Org
+     *
+     * @param schema
+     */
+    private static void addOrg(Schema schema) {
+        Entity entity = schema.addEntity("Org");
+
+        entity.setTableName("Org");
+        entity.addStringProperty("uid").primaryKey();
+        entity.addStringProperty("pid").notNull();
+        entity.addStringProperty("name");
     }
 
 }

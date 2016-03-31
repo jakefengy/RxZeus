@@ -29,7 +29,7 @@ public class UserDao extends AbstractDao<User, String> {
         public final static Property Password = new Property(2, String.class, "Password", false, "PASSWORD");
         public final static Property Token = new Property(3, String.class, "Token", false, "TOKEN");
         public final static Property Status = new Property(4, String.class, "Status", false, "STATUS");
-        public final static Property IsAutoLogin = new Property(5, Boolean.class, "IsAutoLogin", false, "IS_AUTO_LOGIN");
+        public final static Property Logged = new Property(5, Boolean.class, "Logged", false, "LOGGED");
         public final static Property LoggedDate = new Property(6, Long.class, "LoggedDate", false, "LOGGED_DATE");
     };
 
@@ -54,7 +54,7 @@ public class UserDao extends AbstractDao<User, String> {
                 "\"PASSWORD\" TEXT," + // 2: Password
                 "\"TOKEN\" TEXT," + // 3: Token
                 "\"STATUS\" TEXT," + // 4: Status
-                "\"IS_AUTO_LOGIN\" INTEGER," + // 5: IsAutoLogin
+                "\"LOGGED\" INTEGER," + // 5: Logged
                 "\"LOGGED_DATE\" INTEGER);"); // 6: LoggedDate
     }
 
@@ -94,9 +94,9 @@ public class UserDao extends AbstractDao<User, String> {
             stmt.bindString(5, Status);
         }
  
-        Boolean IsAutoLogin = entity.getIsAutoLogin();
-        if (IsAutoLogin != null) {
-            stmt.bindLong(6, IsAutoLogin ? 1L: 0L);
+        Boolean Logged = entity.getLogged();
+        if (Logged != null) {
+            stmt.bindLong(6, Logged ? 1L: 0L);
         }
  
         Long LoggedDate = entity.getLoggedDate();
@@ -126,7 +126,7 @@ public class UserDao extends AbstractDao<User, String> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // Password
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // Token
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // Status
-            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // IsAutoLogin
+            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // Logged
             cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6) // LoggedDate
         );
         return entity;
@@ -140,7 +140,7 @@ public class UserDao extends AbstractDao<User, String> {
         entity.setPassword(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setToken(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setStatus(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setIsAutoLogin(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
+        entity.setLogged(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
         entity.setLoggedDate(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
      }
     

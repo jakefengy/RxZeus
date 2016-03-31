@@ -1,6 +1,7 @@
 package com.xm.zeus.db.app.entity;
 
 import com.xm.zeus.db.app.dao.DaoSession;
+
 import de.greenrobot.dao.DaoException;
 
 import com.xm.zeus.db.app.dao.TimeStampDao;
@@ -9,20 +10,26 @@ import com.xm.zeus.db.app.dao.TimeStampDao;
 
 // KEEP INCLUDES - put your custom includes here
 // KEEP INCLUDES END
+
 /**
  * Entity mapped to table "TimeStamp".
  */
 public class TimeStamp {
 
     public final static String TS_COLLEAGUE = "TS_COLLEAGUE";
+    public final static String TS_FRIEND = "TS_FRIEND";
 
     private String ModuleName;
     private long TimeStamp;
 
-    /** Used to resolve relations */
+    /**
+     * Used to resolve relations
+     */
     private transient DaoSession daoSession;
 
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     private transient TimeStampDao myDao;
 
 
@@ -41,7 +48,9 @@ public class TimeStamp {
         this.TimeStamp = TimeStamp;
     }
 
-    /** called by internal mechanisms, do not call yourself. */
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getTimeStampDao() : null;
@@ -63,27 +72,33 @@ public class TimeStamp {
         this.TimeStamp = TimeStamp;
     }
 
-    /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */
+    /**
+     * Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context.
+     */
     public void delete() {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
-        }    
+        }
         myDao.delete(this);
     }
 
-    /** Convenient call for {@link AbstractDao#update(Object)}. Entity must attached to an entity context. */
+    /**
+     * Convenient call for {@link AbstractDao#update(Object)}. Entity must attached to an entity context.
+     */
     public void update() {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
-        }    
+        }
         myDao.update(this);
     }
 
-    /** Convenient call for {@link AbstractDao#refresh(Object)}. Entity must attached to an entity context. */
+    /**
+     * Convenient call for {@link AbstractDao#refresh(Object)}. Entity must attached to an entity context.
+     */
     public void refresh() {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
-        }    
+        }
         myDao.refresh(this);
     }
 

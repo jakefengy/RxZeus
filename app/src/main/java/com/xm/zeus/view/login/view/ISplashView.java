@@ -7,12 +7,9 @@ public interface ISplashView {
 
     void initStart();
 
-    void initComplete();
+    void toHome();
 
-    void initFail();
-
-    void startChatService();
-
+    void toLogin();
 
 
 }
