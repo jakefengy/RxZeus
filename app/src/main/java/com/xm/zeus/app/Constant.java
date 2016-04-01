@@ -1,4 +1,4 @@
-package com.xm.zeus;
+package com.xm.zeus.app;
 
 /**
  * Created by lvxia on 2016-03-29.

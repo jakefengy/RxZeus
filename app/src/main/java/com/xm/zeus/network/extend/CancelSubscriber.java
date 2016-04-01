@@ -1,5 +1,10 @@
 package com.xm.zeus.network.extend;
 
+import android.content.Intent;
+
+import com.xm.zeus.app.App;
+import com.xm.zeus.view.login.view.Activity_Login;
+
 import rx.Subscriber;
 
 /**
@@ -8,12 +13,7 @@ import rx.Subscriber;
 public abstract class CancelSubscriber<T> extends Subscriber<T> implements HttpCancelListener {
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onCancelProgress() {
+    public void unSubscribe() {
         if (!isUnsubscribed()) {
             unsubscribe();
         }
@@ -25,14 +25,29 @@ public abstract class CancelSubscriber<T> extends Subscriber<T> implements HttpC
     }
 
     @Override
-    public void onCompleted() {
-
-    }
-
-    @Override
     public void onError(Throwable e) {
+        if (e instanceof TokenException) {
+            preToLogin();
+            toLogin();
+        } else {
+            onEventError(e);
+        }
+
     }
 
     public abstract void onEventNext(T t);
+
+    protected void onEventError(Throwable e) {
+
+    }
+
+    protected void preToLogin() {
+
+    }
+
+    private void toLogin() {
+        Intent intent = Activity_Login.getLoginIntent(App.instance);
+        App.instance.startActivity(intent);
+    }
 
 }

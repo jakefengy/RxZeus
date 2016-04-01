@@ -3,7 +3,7 @@ package com.xm.zeus.view.login.interactor;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.xm.zeus.Constant;
+import com.xm.zeus.app.Constant;
 import com.xm.zeus.db.app.entity.Colleague;
 import com.xm.zeus.db.app.entity.Friend;
 import com.xm.zeus.db.app.entity.Group;
@@ -20,8 +20,6 @@ import com.xm.zeus.network.extend.MapFunc1;
 import com.xm.zeus.utils.Logger;
 import com.xm.zeus.utils.PinYin;
 
-import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
-
 import java.util.List;
 import java.util.Locale;
 
@@ -30,7 +28,6 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.functions.Func4;
 import rx.schedulers.Schedulers;
 
 /**
@@ -50,16 +47,11 @@ public class SplashInteractorImpl implements ISplashInteractor {
 
     public SplashInteractorImpl() {
         pinYin = new PinYin();
-    }
-
-    @Override
-    public void initAppDB(Context context) {
-        Logger.i(TAG, "SplashInteractorImpl.initAppDB");
-        userHelper = new UserHelper(context);
-        personHelper = new ColleagueHelper(context);
-        friendHelper = new FriendHelper(context);
-        orgHelper = new OrgHelper(context);
-        groupHelper = new GroupHelper(context);
+        userHelper = new UserHelper();
+        personHelper = new ColleagueHelper();
+        friendHelper = new FriendHelper();
+        orgHelper = new OrgHelper();
+        groupHelper = new GroupHelper();
     }
 
     @Override
@@ -67,14 +59,16 @@ public class SplashInteractorImpl implements ISplashInteractor {
 
         Logger.i(TAG, "SplashInteractorImpl.initGallery.Start");
         Observable
-                .create(new Observable.OnSubscribe<Object>() {
+                .create(new Observable.OnSubscribe<String>() {
                     @Override
-                    public void call(Subscriber<? super Object> subscriber) {
+                    public void call(Subscriber<? super String> subscriber) {
                         try {
                             Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                        subscriber.onNext("complete");
+                        subscriber.onCompleted();
                     }
                 })
                 .subscribeOn(Schedulers.io())

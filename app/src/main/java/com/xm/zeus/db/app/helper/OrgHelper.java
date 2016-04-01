@@ -1,24 +1,20 @@
 package com.xm.zeus.db.app.helper;
 
-import android.content.Context;
 import android.text.TextUtils;
 
+import com.xm.zeus.db.AppDbHelper;
 import com.xm.zeus.db.app.dao.OrgDao;
 import com.xm.zeus.db.app.entity.Org;
 
 import java.util.List;
 
-/**
- * 作者：小孩子xm on 2016-03-31 21:59
- * 邮箱：1065885952@qq.com
- */
-public class OrgHelper extends BaseHelper {
+
+public class OrgHelper {
 
     private OrgDao orgDao;
 
-    public OrgHelper(Context appContext) {
-        super(appContext);
-        orgDao = daoSession.getOrgDao();
+    public OrgHelper() {
+        orgDao = AppDbHelper.getInstance().getAppDaoSession().getOrgDao();
     }
 
     public void add(Org org) {

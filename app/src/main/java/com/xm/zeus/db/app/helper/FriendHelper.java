@@ -1,8 +1,8 @@
 package com.xm.zeus.db.app.helper;
 
-import android.content.Context;
 import android.text.TextUtils;
 
+import com.xm.zeus.db.AppDbHelper;
 import com.xm.zeus.db.app.dao.FriendDao;
 import com.xm.zeus.db.app.entity.Friend;
 
@@ -12,13 +12,12 @@ import java.util.List;
 /**
  * 好友数据库操作
  */
-public class FriendHelper extends BaseHelper {
+public class FriendHelper {
 
     private FriendDao friendDao;
 
-    public FriendHelper(Context appContext) {
-        super(appContext);
-        friendDao = daoSession.getFriendDao();
+    public FriendHelper() {
+        friendDao = AppDbHelper.getInstance().getAppDaoSession().getFriendDao();
     }
 
     public void saveOrUpdate(Friend card) {

@@ -10,8 +10,6 @@ import com.xm.zeus.network.extend.CancelSubscriber;
  */
 public interface ISplashInteractor {
 
-    void initAppDB(Context context);
-
     void initGallery();
 
     User getLastLoggedUser();

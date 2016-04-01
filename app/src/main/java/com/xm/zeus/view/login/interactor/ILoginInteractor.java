@@ -1,9 +1,20 @@
 package com.xm.zeus.view.login.interactor;
 
-/**
- * 作者：小孩子xm on 2016-03-31 21:49
- * 邮箱：1065885952@qq.com
- */
+
+import android.content.Context;
+
+import com.xm.zeus.network.extend.CancelSubscriber;
+
 public interface ILoginInteractor {
+
+    boolean checkUserName(String username);
+
+    boolean checkPassword(String psw);
+
+    boolean checkNet(Context context);
+
+    void loginToBusiness(String username, String password, String org, String appKey, CancelSubscriber<Boolean> callback);
+
+    void loginToXmpp(String username, String password);
 
 }

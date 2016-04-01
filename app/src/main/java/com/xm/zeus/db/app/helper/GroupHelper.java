@@ -1,10 +1,9 @@
 package com.xm.zeus.db.app.helper;
 
-import android.content.Context;
 import android.text.TextUtils;
 
+import com.xm.zeus.db.AppDbHelper;
 import com.xm.zeus.db.app.dao.ColleagueDao;
-import com.xm.zeus.db.app.dao.FriendDao;
 import com.xm.zeus.db.app.dao.GroupDao;
 import com.xm.zeus.db.app.dao.GroupMemberIdDao;
 import com.xm.zeus.db.app.entity.Colleague;
@@ -19,18 +18,17 @@ import de.greenrobot.dao.query.QueryBuilder;
 /**
  * Created by lvxia on 2016-03-29.
  */
-public class GroupHelper extends BaseHelper {
+public class GroupHelper {
 
     private GroupDao groupDao;
     private GroupMemberIdDao memberIdDao;
     private ColleagueDao colleagueDao;
 
-    public GroupHelper(Context appContext) {
-        super(appContext);
+    public GroupHelper() {
 
-        groupDao = daoSession.getGroupDao();
-        memberIdDao = daoSession.getGroupMemberIdDao();
-        colleagueDao = daoSession.getColleagueDao();
+        groupDao = AppDbHelper.getInstance().getAppDaoSession().getGroupDao();
+        memberIdDao = AppDbHelper.getInstance().getAppDaoSession().getGroupMemberIdDao();
+        colleagueDao = AppDbHelper.getInstance().getAppDaoSession().getColleagueDao();
     }
 
     /**

@@ -1,11 +1,11 @@
 package com.xm.zeus.view.login.view;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.xm.zeus.R;
 import com.xm.zeus.utils.Logger;
-import com.xm.zeus.view.login.interactor.ISplashInteractor;
 import com.xm.zeus.view.login.presenter.ISplashPresenter;
 import com.xm.zeus.view.login.presenter.SplashPresenterImpl;
 
@@ -39,6 +39,8 @@ public class Activity_Splash extends AppCompatActivity implements ISplashView {
     @Override
     public void toLogin() {
         Logger.i(TAG, "toLogin");
+        Intent loginIntent = Activity_Login.getLoginIntent(Activity_Splash.this);
+        startActivity(loginIntent);
     }
 
     @Override

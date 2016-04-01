@@ -1,11 +1,8 @@
 package com.xm.zeus.db.user.helper;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-import com.xm.zeus.db.user.dao.DaoMaster;
-import com.xm.zeus.db.user.dao.DaoSession;
+import com.xm.zeus.db.AppDbHelper;
 import com.xm.zeus.db.user.dao.UserDao;
 import com.xm.zeus.db.user.entity.User;
 
@@ -19,14 +16,10 @@ import de.greenrobot.dao.query.QueryBuilder;
  */
 public class UserHelper {
 
-    private final static String USER_DB_NAME = "UserDB";
-
     private UserDao userDao;
 
-    public UserHelper(Context appContext) {
-        DaoMaster.DevOpenHelper openHelper = new DaoMaster.DevOpenHelper(appContext, USER_DB_NAME, null);
-        SQLiteDatabase db = openHelper.getWritableDatabase();
-        userDao = new DaoMaster(db).newSession().getUserDao();
+    public UserHelper() {
+        userDao = AppDbHelper.getInstance().getUserDaoSession().getUserDao();
     }
 
     public List<User> getUsers() {

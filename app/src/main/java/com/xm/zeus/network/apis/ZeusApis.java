@@ -5,6 +5,7 @@ import com.xm.zeus.db.app.entity.Friend;
 import com.xm.zeus.db.app.entity.Group;
 import com.xm.zeus.db.app.entity.Org;
 import com.xm.zeus.network.entity.HttpResult;
+import com.xm.zeus.network.entity.LoginResult;
 
 import java.util.List;
 
@@ -16,6 +17,10 @@ import rx.Observable;
  * 业务请求接口
  */
 public interface ZeusApis {
+
+    // 登录
+    @GET("login")
+    Observable<HttpResult<LoginResult>> login(@Query("username") String username, @Query("password") String password, @Query("organization") String organization, @Query("appkey") String appkey);
 
     // 通讯录
 

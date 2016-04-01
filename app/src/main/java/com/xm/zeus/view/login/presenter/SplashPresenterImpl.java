@@ -1,12 +1,10 @@
 package com.xm.zeus.view.login.presenter;
 
 import android.content.Context;
-import android.nfc.Tag;
 
-import com.xm.zeus.Constant;
+import com.xm.zeus.app.Constant;
 import com.xm.zeus.chat.ChatPresenter;
 import com.xm.zeus.chat.listener.LoginListener;
-import com.xm.zeus.db.app.dao.TimeStampDao;
 import com.xm.zeus.db.app.entity.Colleague;
 import com.xm.zeus.db.app.entity.TimeStamp;
 import com.xm.zeus.db.app.helper.TimeStampHelper;
@@ -39,7 +37,7 @@ public class SplashPresenterImpl implements ISplashPresenter {
         this.iview = iview;
         this.interactor = new SplashInteractorImpl();
         this.chatPresenter = ChatPresenter.getInstance();
-        this.timeStampHelper = new TimeStampHelper(context);
+        this.timeStampHelper = new TimeStampHelper();
     }
 
     @Override
@@ -50,7 +48,6 @@ public class SplashPresenterImpl implements ISplashPresenter {
             iview.initStart();
         }
 
-        interactor.initAppDB(context);
         interactor.initGallery();
 
         checkUserAndLogin();
@@ -64,6 +61,7 @@ public class SplashPresenterImpl implements ISplashPresenter {
             if (iview != null) {
                 iview.toLogin();
             }
+            return;
         }
 
         if (!interactor.checkNetwork(context)) {
@@ -71,6 +69,8 @@ public class SplashPresenterImpl implements ISplashPresenter {
             if (iview != null) {
                 iview.toHome();
             }
+
+            return;
         }
 
         loginToXmpp(user);

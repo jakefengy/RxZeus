@@ -1,9 +1,9 @@
 package com.xm.zeus.db.app.helper;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.text.TextUtils;
 
+import com.xm.zeus.db.AppDbHelper;
 import com.xm.zeus.db.app.dao.ColleagueDao;
 import com.xm.zeus.db.app.dao.ColleagueDeptDao;
 import com.xm.zeus.db.app.entity.Colleague;
@@ -17,16 +17,15 @@ import de.greenrobot.dao.query.QueryBuilder;
 /**
  * Created by lvxia on 2016-03-29.
  */
-public class ColleagueHelper extends BaseHelper {
+public class ColleagueHelper {
 
     private ColleagueDao personDao;
     private ColleagueDeptDao personDeptDao;
 
-    public ColleagueHelper(Context appContext) {
-        super(appContext);
+    public ColleagueHelper() {
 
-        personDao = daoSession.getColleagueDao();
-        personDeptDao = daoSession.getColleagueDeptDao();
+        personDao = AppDbHelper.getInstance().getAppDaoSession().getColleagueDao();
+        personDeptDao = AppDbHelper.getInstance().getAppDaoSession().getColleagueDeptDao();
 
     }
 

@@ -1,8 +1,8 @@
 package com.xm.zeus.db.app.helper;
 
-import android.content.Context;
 import android.text.TextUtils;
 
+import com.xm.zeus.db.AppDbHelper;
 import com.xm.zeus.db.app.dao.TimeStampDao;
 import com.xm.zeus.db.app.entity.TimeStamp;
 
@@ -11,13 +11,12 @@ import java.util.List;
 /**
  * Created by lvxia on 2016-03-29.
  */
-public class TimeStampHelper extends BaseHelper {
+public class TimeStampHelper {
 
     private TimeStampDao timeStampDao;
 
-    public TimeStampHelper(Context appContext) {
-        super(appContext);
-        timeStampDao = daoSession.getTimeStampDao();
+    public TimeStampHelper() {
+        timeStampDao = AppDbHelper.getInstance().getAppDaoSession().getTimeStampDao();
     }
 
     /**
