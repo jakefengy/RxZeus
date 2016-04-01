@@ -1,20 +1,15 @@
 package com.xm.zeus.network;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.functions.Func2;
-import rx.functions.Func3;
-import rx.internal.schedulers.ScheduledAction;
 import rx.schedulers.Schedulers;
 
 /**
@@ -42,7 +37,7 @@ public class RxJavaTest {
 
     /**
      * 生成连续数，range start to start + count -1
-     * <p>
+     * <p/>
      * range(2,5)  -> 2,3,4,5,6
      */
     private static void range(Subscriber<Integer> subscriber) {
@@ -51,7 +46,7 @@ public class RxJavaTest {
 
     /**
      * 每次subscribe(订阅)的时候，都会产生新的Observable，区别于Observable.just(input)
-     * <p>
+     * <p/>
      * onNext 1459321021710
      * onCompleted
      * onNext 1459321021717
@@ -204,6 +199,201 @@ public class RxJavaTest {
                 });
     }
 
+    // 过滤 Observable http://blog.chinaunix.net/uid-20771867-id-5194384.html
+
+    // 去重，只要重复就都去掉
+    private static void distinct() {
+        Observable.just(1, 2, 3, 4, 1, 2, 3, 4).distinct()
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+    }
+
+    // 去重，n == n+1  remove n+1
+    private static void distinctUntilChanged() {
+        Observable.just(1, 2, 3, 3, 1, 2, 3, 4, 4, 5).distinctUntilChanged()
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+    }
+
+    // 得到index元素
+    private static void elementAt() {
+        Observable.just(1, 2, 3, 4, 5).elementAt(2)
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println("position 2 = " + integer);
+                    }
+                });
+    }
+
+    // 过滤获得符合条件的数据
+    private static void filter() {
+        Observable.just(1, 2, 3, 4, 5)
+                .filter(new Func1<Integer, Boolean>() {
+                    @Override
+                    public Boolean call(Integer integer) {
+                        return integer % 2 == 0;
+                    }
+                })
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+    }
+
+    // 返回满足条件的第一个元素
+    private static void first() {
+        Observable.just(1, 2, 3, 4, 5)
+                .first(new Func1<Integer, Boolean>() {
+                    @Override
+                    public Boolean call(Integer integer) {
+                        return integer > 1;
+                    }
+                })
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError");
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println("onNext " + integer);
+                    }
+                });
+    }
+
+    // 返回满足条件的第一个元素，不会输出符合条件之前的元素 如输出｛1,2,3,4,5｝中大于1的元素为 2
+    private static void block() {
+        Observable.just(1, 2, 3, 4, 5)
+                .first(new Func1<Integer, Boolean>() {
+                    @Override
+                    public Boolean call(Integer integer) {
+                        return integer > 1;
+                    }
+                })
+                .toBlocking()
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError");
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println("onNext " + integer);
+                    }
+                });
+    }
+
+    // 跳过n取m个元素
+    private static void skipAndTake() {
+
+        Observable.just(1, 2, 3, 4, 5).skip(2).take(2)
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println(integer);
+                    }
+                });
+
+    }
+
+    // Sample操作符会定时地发射源Observable最近发射的数据，其他的都会被过滤掉
+    private static void sample() {
+        Observable
+                .create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        try {
+                            for (int i = 1; i <= 20; i++) {
+                                Thread.sleep(200);
+                                subscriber.onNext(i);
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .sample(1, TimeUnit.SECONDS)
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println("Sample " + integer);
+                    }
+                });
+    }
+
+    // ThrottleLast操作符会定时地发射源Observable最近发射的数据，其他的都会被过滤掉
+    private static void throttleLast() {
+        Observable
+                .create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        try {
+                            for (int i = 1; i <= 20; i++) {
+                                Thread.sleep(200);
+                                subscriber.onNext(i);
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .throttleLast(1, TimeUnit.SECONDS)
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println("throttleLast " + integer);
+                    }
+                });
+    }
+
+    // ThrottleFirst操作符则会定期发射这个时间段里源Observable发射的第一个数据
+    private static void throttleFirst() {
+        Observable
+                .create(new Observable.OnSubscribe<Integer>() {
+                    @Override
+                    public void call(Subscriber<? super Integer> subscriber) {
+                        try {
+                            for (int i = 1; i <= 20; i++) {
+                                Thread.sleep(200);
+                                subscriber.onNext(i);
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println("throttleFirst " + integer);
+                    }
+                });
+    }
+
     private static void method() {
 
     }
@@ -211,7 +401,7 @@ public class RxJavaTest {
 
     public static void main(String[] args) {
 
-        window();
+        throttleFirst();
     }
 
 
