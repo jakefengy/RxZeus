@@ -10,6 +10,7 @@ import com.xm.zeus.db.app.entity.Group;
 import com.xm.zeus.db.app.entity.Org;
 import com.xm.zeus.db.app.helper.ColleagueHelper;
 import com.xm.zeus.db.app.helper.FriendHelper;
+import com.xm.zeus.db.app.helper.GroupHelper;
 import com.xm.zeus.db.app.helper.OrgHelper;
 import com.xm.zeus.db.user.entity.User;
 import com.xm.zeus.db.user.helper.UserHelper;
@@ -43,6 +44,7 @@ public class SplashInteractorImpl implements ISplashInteractor {
     private ColleagueHelper personHelper;
     private FriendHelper friendHelper;
     private OrgHelper orgHelper;
+    private GroupHelper groupHelper;
 
     private PinYin pinYin;
 
@@ -57,6 +59,7 @@ public class SplashInteractorImpl implements ISplashInteractor {
         personHelper = new ColleagueHelper(context);
         friendHelper = new FriendHelper(context);
         orgHelper = new OrgHelper(context);
+        groupHelper = new GroupHelper(context);
     }
 
     @Override
@@ -106,99 +109,117 @@ public class SplashInteractorImpl implements ISplashInteractor {
     @Override
     public void downloadContacts(User user, long timestamp, CancelSubscriber subscriber) {
 
-        Observable<Colleague> obColleague = Network.getZeusApis().getColleague(user.getToken(), user.getUserId(), Constant.Organization, timestamp, "false")
+        Observable<Boolean> obColleague = Network.getZeusApis().getColleague(user.getToken(), user.getUserId(), Constant.Organization, timestamp, "false")
                 .map(new MapFunc1<List<Colleague>>())
-                .flatMap(new Func1<List<Colleague>, Observable<Colleague>>() {
+                .map(new Func1<List<Colleague>, Boolean>() {
                     @Override
-                    public Observable<Colleague> call(List<Colleague> colleagues) {
-                        return Observable.from(colleagues);
+                    public Boolean call(List<Colleague> colleagues) {
+                        return processColleague(colleagues);
                     }
                 });
 
-        Observable<Friend> obFriend = Network.getZeusApis().getFriends(user.getToken(), user.getUserId(), Constant.Organization, timestamp, "false")
+        Observable<Boolean> obFriend = Network.getZeusApis().getFriends(user.getToken(), user.getUserId(), Constant.Organization, timestamp, "false")
                 .map(new MapFunc1<List<Friend>>())
-                .flatMap(new Func1<List<Friend>, Observable<Friend>>() {
+                .map(new Func1<List<Friend>, Boolean>() {
                     @Override
-                    public Observable<Friend> call(List<Friend> friends) {
-                        return Observable.from(friends);
+                    public Boolean call(List<Friend> friends) {
+                        return processFriend(friends);
                     }
                 });
 
-        Observable<Org> obOrg = Network.getZeusApis().getOrgs(user.getToken(), user.getUserId(), Constant.Organization)
-                .map(new MapFunc1<Org>());
+        Observable<Boolean> obOrg = Network.getZeusApis().getOrgs(user.getToken(), user.getUserId(), Constant.Organization)
+                .map(new MapFunc1<Org>())
+                .map(new Func1<Org, Boolean>() {
+                    @Override
+                    public Boolean call(Org org) {
+                        return processOrg(org);
+                    }
+                });
 
-        Observable<Group> obGroup = Network.getZeusApis().getGroup(user.getToken(), user.getUserId(), Constant.Organization)
+        Observable<Boolean> obGroup = Network.getZeusApis().getGroup(user.getToken(), user.getUserId(), Constant.Organization)
                 .map(new MapFunc1<List<Group>>())
-                .flatMap(new Func1<List<Group>, Observable<Group>>() {
+                .map(new Func1<List<Group>, Boolean>() {
                     @Override
-                    public Observable<Group> call(List<Group> groups) {
-                        return Observable.from(groups);
+                    public Boolean call(List<Group> groups) {
+                        return processGroup(groups);
                     }
                 });
 
-        Observable.zip(obColleague, obFriend, obOrg, obGroup, new Func4<Colleague, Friend, Org, Group, Boolean>() {
-            @Override
-            public Boolean call(Colleague colleague, Friend friend, Org org, Group group) {
-                return null;
-            }
-        });
-
+        Observable.concat(obColleague, obFriend, obGroup, obOrg).subscribe(subscriber);
 
     }
 
-    private void processColleague(Colleague colleague) {
+    private boolean processColleague(List<Colleague> colleagues) {
 
         try {
 
-            if (colleague.getType() == 1) {// 删除
-
-                personHelper.deleteById(colleague.getUid());
-
-            } else { // 新增或修改
-
-                String selling = pinYin.toPinYin(colleague.getUsername());
-                String firstLetter = selling.substring(0, 1).toUpperCase(Locale.getDefault());
-                colleague.setSpelling(selling);
-                colleague.setFirstletter(firstLetter);
-                colleague.setTimestamp(System.currentTimeMillis());
-                colleague.setHeadName("同事");
-                colleague.setIsCheck(false);
-                colleague.setDataType(Colleague.DATATYPE_COLLEAGUE);
-
-                personHelper.saveOrUpdate(colleague);
+            if (colleagues == null) {
+                return true;
             }
 
+            for (Colleague colleague : colleagues) {
+
+                if (colleague.getType() == 1) {// 删除
+
+                    personHelper.deleteById(colleague.getUid());
+
+                } else { // 新增或修改
+
+                    String selling = pinYin.toPinYin(colleague.getUsername());
+                    String firstLetter = selling.substring(0, 1).toUpperCase(Locale.getDefault());
+                    colleague.setSpelling(selling);
+                    colleague.setFirstletter(firstLetter);
+                    colleague.setTimestamp(System.currentTimeMillis());
+                    colleague.setHeadName("同事");
+                    colleague.setIsCheck(false);
+                    colleague.setDataType(Colleague.DATATYPE_COLLEAGUE);
+
+                    personHelper.saveOrUpdate(colleague);
+                }
+            }
+
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
 
     }
 
-    private void processFriend(Friend friend) {
+    private boolean processFriend(List<Friend> friends) {
 
         try {
-            if (friend.getType() == 1) {
-                friendHelper.deleteById(friend.getUid());
-            } else {
-                String selling = pinYin.toPinYin(friend.getUsername());
-                String firstLetter = selling.substring(0, 1).toUpperCase(Locale.getDefault());
-                friend.setSpelling(selling);
-                friend.setFirstLetter(firstLetter);
-                friend.setTimestamp(System.currentTimeMillis());
-                friend.setHeadName("名片夹");
-                friend.setDataType(Friend.DATATYPE_FRIEND);
-                friendHelper.saveOrUpdate(friend);
-            }
-        } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
-            badHanyuPinyinOutputFormatCombination.printStackTrace();
-        }
 
+            if (friends == null) {
+                return true;
+            }
+
+            for (Friend friend : friends) {
+
+                if (friend.getType() == 1) {
+                    friendHelper.deleteById(friend.getUid());
+                } else {
+                    String selling = pinYin.toPinYin(friend.getUsername());
+                    String firstLetter = selling.substring(0, 1).toUpperCase(Locale.getDefault());
+                    friend.setSpelling(selling);
+                    friend.setFirstLetter(firstLetter);
+                    friend.setTimestamp(System.currentTimeMillis());
+                    friend.setHeadName("名片夹");
+                    friend.setDataType(Friend.DATATYPE_FRIEND);
+                    friendHelper.saveOrUpdate(friend);
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    private void processOrg(Org org) {
+    private boolean processOrg(Org org) {
         try {
             if (org == null) {
-                return;
+                return true;
             }
 
             if (TextUtils.isEmpty(org.getPid())) {
@@ -211,10 +232,34 @@ public class SplashInteractorImpl implements ISplashInteractor {
                     processOrg(child);
             }
 
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 
+    private boolean processGroup(List<Group> groups) {
+        try {
+
+            if (groups != null) {
+                return true;
+            }
+
+            for (Group group : groups) {
+                group.setDataType(Group.DATATYPE_GROUP);
+                group.setHeadName("讨论组");
+                group.setTimestamp(System.currentTimeMillis());
+            }
+            if (groups.size() > 0) {
+                groupHelper.addGroups(groups);
+            }
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 }

@@ -2,6 +2,7 @@ package com.xm.zeus.network;
 
 import com.xm.zeus.db.user.entity.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -11,6 +12,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
+import rx.functions.Action2;
 import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.functions.Func2;
@@ -41,7 +43,7 @@ public class RxJavaTest {
 
     /**
      * 生成连续数，range start to start + count -1
-     * <p/>
+     * <p>
      * range(2,5)  -> 2,3,4,5,6
      */
     private static void range(Subscriber<Integer> subscriber) {
@@ -50,7 +52,7 @@ public class RxJavaTest {
 
     /**
      * 每次subscribe(订阅)的时候，都会产生新的Observable，区别于Observable.just(input)
-     * <p/>
+     * <p>
      * onNext 1459321021710
      * onCompleted
      * onNext 1459321021717
@@ -1069,10 +1071,106 @@ public class RxJavaTest {
                 });
     }
 
+    private static void takeWhile() {
+        Observable.just(1, 2, 3, 4, 5)
+                .takeWhile(new Func1<Integer, Boolean>() {
+                    @Override
+                    public Boolean call(Integer integer) {
+                        return integer <= 3;
+                    }
+                })
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println("onNext " + integer);
+                    }
+                });
+    }
+
+    private static void takeUntil() {
+        Observable.just(1, 2, 3, 4, 5)
+                .takeUntil(Observable.just(1, 2, 3))
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        System.out.println("onNext " + integer);
+                    }
+                });
+    }
+
+    // 聚合操作符 Aggregate
+
+    private static void concat() {
+
+        // 合并多个Observable，并严格按照顺序执行，区别于merge
+
+        Observable<Integer> ob1 = Observable.just(1, 2, 3);
+        Observable<Integer> ob2 = Observable.just(7, 8, 9);
+
+        Observable.concat(ob1, ob2).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                System.out.println("onNext " + integer);
+            }
+        });
+
+    }
+
+    private static void count() {
+
+        // 计算Observable一共发射出多少次onNext，若中途出错则返回onError
+
+        Observable.just(1, 2, 3).count().subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                System.out.println("Observable.just.count = " + integer);
+            }
+        });
+    }
+
+    private static void reduce() {
+
+        // 类似scan，Reduce操作符应用一个函数接收Observable发射的数据和函数的计算结果作为下次计算的参数，输出最后的结果，但不输出过程
+
+        Observable.just(1, 2, 3).reduce(new Func2<Integer, Integer, Integer>() {
+            @Override
+            public Integer call(Integer integer, Integer integer2) {
+                return integer + integer2;
+            }
+        }).subscribe(new Action1<Integer>() {
+            @Override
+            public void call(Integer integer) {
+                System.out.println("Observable.just.reduce = " + integer);
+            }
+        });
+
+    }
+
+    private static void collect() {
+
+        // 将元素收集到一个集合中。
+        Observable.just(1, 2, 3).collect(new Func0<List<Integer>>() {
+            @Override
+            public List<Integer> call() {
+                return new ArrayList<>();
+            }
+        }, new Action2<List<Integer>, Integer>() {
+            @Override
+            public void call(List<Integer> integers, Integer integer) {
+                integers.add(integer);
+            }
+        }).subscribe(new Action1<List<Integer>>() {
+            @Override
+            public void call(List<Integer> integers) {
+                System.out.println("Observable.just.reduce = " + integers);
+            }
+        });
+
+    }
 
     public static void main(String[] args) {
 
-        skipUntil();
+        collect();
     }
 
 

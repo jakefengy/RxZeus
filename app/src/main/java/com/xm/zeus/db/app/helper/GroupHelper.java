@@ -38,7 +38,7 @@ public class GroupHelper extends BaseHelper {
      *
      * @param groupList 组集合
      */
-    public void addGroups(List<Group> groupList, List<String> memberIds) {
+    public void addGroups(List<Group> groupList) {
 
         if (groupList == null || groupList.size() <= 0) {
             return;
@@ -47,7 +47,9 @@ public class GroupHelper extends BaseHelper {
         for (Group selfGroup : groupList) {
             deleteMembers(selfGroup.getUid());
             addOrUpdateGroup(selfGroup);
-            addMembers(selfGroup.getUid(), memberIds);
+            if (selfGroup.getUserids() != null && selfGroup.getUserids().size() > 0) {
+                addMembers(selfGroup.getUid(), selfGroup.getUserids());
+            }
         }
     }
 
