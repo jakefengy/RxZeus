@@ -3,19 +3,21 @@ package com.xm.zeus.view.login.presenter;
 import android.content.Context;
 
 import com.xm.zeus.app.Constant;
-import com.xm.zeus.chat.ChatPresenter;
-import com.xm.zeus.chat.listener.LoginListener;
-import com.xm.zeus.db.app.entity.Colleague;
+import com.xm.zeus.chat.Xmpp;
 import com.xm.zeus.db.app.entity.TimeStamp;
 import com.xm.zeus.db.app.helper.TimeStampHelper;
 import com.xm.zeus.db.user.entity.User;
-import com.xm.zeus.network.extend.CancelSubscriber;
+import com.xm.zeus.network.extend.ApiSubscriber;
 import com.xm.zeus.utils.Logger;
 import com.xm.zeus.view.login.interactor.ISplashInteractor;
 import com.xm.zeus.view.login.interactor.SplashInteractorImpl;
 import com.xm.zeus.view.login.view.ISplashView;
 
+import org.jivesoftware.smack.AbstractXMPPConnection;
+
 import java.util.Date;
+
+import rx.Subscriber;
 
 /**
  * Created by lvxia on 2016-03-28.
@@ -28,7 +30,7 @@ public class SplashPresenterImpl implements ISplashPresenter {
 
     private ISplashView iview;
     private ISplashInteractor interactor;
-    private ChatPresenter chatPresenter;
+    private Xmpp xmpp;
 
     private TimeStampHelper timeStampHelper;
 
@@ -36,7 +38,7 @@ public class SplashPresenterImpl implements ISplashPresenter {
         this.context = context;
         this.iview = iview;
         this.interactor = new SplashInteractorImpl();
-        this.chatPresenter = ChatPresenter.getInstance();
+        this.xmpp = Xmpp.getInstance();
         this.timeStampHelper = new TimeStampHelper();
     }
 
@@ -80,19 +82,23 @@ public class SplashPresenterImpl implements ISplashPresenter {
     private void loginToXmpp(final User user) {
 
         Logger.i(TAG, "loginToXmpp");
-        chatPresenter.login(Constant.ServiceName, Constant.ServiceHost, Constant.ServicePort,
-                user.getUserName(), user.getPassword(), Constant.PlatformResource, new LoginListener() {
+        xmpp.login(Constant.ServiceName, Constant.ServiceHost, Constant.ServicePort,
+                user.getUserId(), user.getPassword(), Constant.PlatformResource, new Subscriber<AbstractXMPPConnection>() {
                     @Override
-                    public void onComplete() {
+                    public void onCompleted() {
                         downloadContacts(user);
                     }
 
                     @Override
-                    public void onError() {
-                        // To login
+                    public void onError(Throwable e) {
                         if (iview != null) {
                             iview.toLogin();
                         }
+                    }
+
+                    @Override
+                    public void onNext(AbstractXMPPConnection connection) {
+                        xmpp.setXmppConnection(connection);
                     }
                 });
 
@@ -105,14 +111,14 @@ public class SplashPresenterImpl implements ISplashPresenter {
         long colleagueTS = timeStampHelper.findByKey(TimeStamp.TS_COLLEAGUE, 0);
         long friendTS = timeStampHelper.findByKey(TimeStamp.TS_FRIEND, 0);
 
-        interactor.downloadContacts(user, colleagueTS, new CancelSubscriber<Colleague>() {
-            @Override
-            public void onEventNext(Colleague colleague) {
 
+        interactor.downloadContacts(user, colleagueTS, friendTS, new ApiSubscriber<Boolean>() {
+            @Override
+            public void onNext(Boolean isDown) {
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onApiError(Throwable e) {
                 super.onError(e);
                 Logger.i(TAG, "downloadContacts.error");
                 if (iview != null) {
@@ -124,6 +130,7 @@ public class SplashPresenterImpl implements ISplashPresenter {
             public void onCompleted() {
                 Logger.i(TAG, "downloadContacts.completed");
                 timeStampHelper.saveOrUpdate(TimeStamp.TS_COLLEAGUE, new Date().getTime());
+                timeStampHelper.saveOrUpdate(TimeStamp.TS_FRIEND, new Date().getTime());
 
                 // To home
                 if (iview != null) {

@@ -19,10 +19,10 @@ import rx.schedulers.Schedulers;
 /**
  * 聊天相关方法实现
  */
-public class ChatInteractor {
+public class XmppHelper {
 
     public void login(final @NonNull String serviceName, final @NonNull String serviceHost, final @NonNull int servicePort,
-                      final @NonNull String userName, final @NonNull String password, final @NonNull String source,
+                      final @NonNull String userId, final @NonNull String password, final @NonNull String source,
                       @NonNull Subscriber<AbstractXMPPConnection> callback) {
 
         Observable
@@ -30,7 +30,7 @@ public class ChatInteractor {
                     @Override
                     public void call(Subscriber<? super AbstractXMPPConnection> subscriber) {
                         try {
-                            subscriber.onNext(login(serviceName, serviceHost, servicePort, userName, password, source));
+                            subscriber.onNext(login(serviceName, serviceHost, servicePort, userId, password, source));
                             subscriber.onCompleted();
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -45,13 +45,13 @@ public class ChatInteractor {
     }
 
     private AbstractXMPPConnection login(@NonNull String serviceName, @NonNull String serviceHost,
-                                         @NonNull int servicePort, @NonNull String userName,
+                                         @NonNull int servicePort, @NonNull String userId,
                                          @NonNull String password, @NonNull String source) throws Exception {
 
         DomainBareJid jid = (DomainBareJid) JidCreate.from(serviceName);
 
         XMPPTCPConnectionConfiguration.Builder config = XMPPTCPConnectionConfiguration.builder()
-                .setUsernameAndPassword(userName + "@" + serviceHost, password)
+                .setUsernameAndPassword(userId + "@" + serviceHost, password)
                 .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
                 .setXmppDomain(jid)
                 .setHost(serviceHost)

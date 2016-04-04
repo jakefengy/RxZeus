@@ -36,7 +36,7 @@ public class UserGenerator {
         user.addStringProperty("UserName");
         user.addStringProperty("Password");
         user.addStringProperty("Token");
-        user.addStringProperty("Status");
+        user.addStringProperty("Org");
         user.addBooleanProperty("Logged");
         user.addLongProperty("LoggedDate");
     }

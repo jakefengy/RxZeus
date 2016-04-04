@@ -41,6 +41,7 @@ public class Activity_Splash extends AppCompatActivity implements ISplashView {
         Logger.i(TAG, "toLogin");
         Intent loginIntent = Activity_Login.getLoginIntent(Activity_Splash.this);
         startActivity(loginIntent);
+        finish();
     }
 
     @Override

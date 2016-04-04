@@ -1,36 +1,31 @@
 package com.xm.zeus.chat;
 
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
-
-import com.xm.zeus.chat.listener.LoginListener;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ReconnectionManager;
-import org.jivesoftware.smack.util.Objects;
 
-import rx.Observable;
 import rx.Subscriber;
 
 /**
  * 聊天控制器
  */
-public class ChatPresenter {
+public class Xmpp {
 
-    private ChatPresenter() {
-        interactor = new ChatInteractor();
+    private Xmpp() {
+        xmppHelper = new XmppHelper();
     }
 
     private static class SingletonHolder {
-        private static final ChatPresenter INSTANCE = new ChatPresenter();
+        private static final Xmpp INSTANCE = new Xmpp();
     }
 
     //获取单例
-    public static ChatPresenter getInstance() {
+    public static Xmpp getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
-    private ChatInteractor interactor;
+    private XmppHelper xmppHelper;
 
     private AbstractXMPPConnection xmppConnection;
     private ReconnectionManager reconnectionManager;
@@ -49,31 +44,13 @@ public class ChatPresenter {
     }
 
     public void login(@NonNull String serviceName, @NonNull String serviceHost, @NonNull int servicePort,
-                      @NonNull String userName, @NonNull String password, @NonNull String source, final LoginListener listener) {
+                      @NonNull String userId, @NonNull String password, @NonNull String source, Subscriber<AbstractXMPPConnection> subscriber) {
 
         setServiceHost(serviceHost);
         setServiceName(serviceName);
         setServicePort(servicePort);
 
-        interactor.login(serviceName, serviceHost, servicePort, userName, password, source, new Subscriber<AbstractXMPPConnection>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                if (listener != null)
-                    listener.onError();
-            }
-
-            @Override
-            public void onNext(AbstractXMPPConnection connection) {
-                setXmppConnection(connection);
-                if (listener != null)
-                    listener.onComplete();
-            }
-        });
+        xmppHelper.login(serviceName, serviceHost, servicePort, userId, password, source, subscriber);
 
     }
 

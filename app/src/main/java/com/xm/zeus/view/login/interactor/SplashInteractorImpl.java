@@ -15,7 +15,7 @@ import com.xm.zeus.db.app.helper.OrgHelper;
 import com.xm.zeus.db.user.entity.User;
 import com.xm.zeus.db.user.helper.UserHelper;
 import com.xm.zeus.network.Network;
-import com.xm.zeus.network.extend.CancelSubscriber;
+import com.xm.zeus.network.extend.ApiSubscriber;
 import com.xm.zeus.network.extend.MapFunc1;
 import com.xm.zeus.utils.Logger;
 import com.xm.zeus.utils.PinYin;
@@ -101,9 +101,9 @@ public class SplashInteractorImpl implements ISplashInteractor {
     }
 
     @Override
-    public void downloadContacts(User user, long timestamp, CancelSubscriber subscriber) {
+    public void downloadContacts(User user, long colleagueTS, long friendTS, ApiSubscriber subscriber) {
 
-        Observable<Boolean> obColleague = Network.getZeusApis().getColleague(user.getToken(), user.getUserId(), Constant.Organization, timestamp, "false")
+        Observable<Boolean> obColleague = Network.getZeusApis().getColleague(user.getToken(), user.getUserId(), Constant.Organization, colleagueTS, "false")
                 .map(new MapFunc1<List<Colleague>>())
                 .map(new Func1<List<Colleague>, Boolean>() {
                     @Override
@@ -112,7 +112,7 @@ public class SplashInteractorImpl implements ISplashInteractor {
                     }
                 });
 
-        Observable<Boolean> obFriend = Network.getZeusApis().getFriends(user.getToken(), user.getUserId(), Constant.Organization, timestamp, "false")
+        Observable<Boolean> obFriend = Network.getZeusApis().getFriends(user.getToken(), user.getUserId(), Constant.Organization, friendTS, "false")
                 .map(new MapFunc1<List<Friend>>())
                 .map(new Func1<List<Friend>, Boolean>() {
                     @Override
@@ -139,7 +139,10 @@ public class SplashInteractorImpl implements ISplashInteractor {
                     }
                 });
 
-        Observable.concat(obColleague, obFriend, obGroup, obOrg).subscribe(subscriber);
+        Observable.concat(obColleague, obFriend, obGroup, obOrg)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
 
     }
 

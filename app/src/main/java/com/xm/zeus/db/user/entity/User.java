@@ -19,7 +19,7 @@ public class User {
     private String UserName;
     private String Password;
     private String Token;
-    private String Status;
+    private String Org;
     private Boolean Logged;
     private Long LoggedDate;
 
@@ -40,12 +40,12 @@ public class User {
         this.UserId = UserId;
     }
 
-    public User(String UserId, String UserName, String Password, String Token, String Status, Boolean Logged, Long LoggedDate) {
+    public User(String UserId, String UserName, String Password, String Token, String Org, Boolean Logged, Long LoggedDate) {
         this.UserId = UserId;
         this.UserName = UserName;
         this.Password = Password;
         this.Token = Token;
-        this.Status = Status;
+        this.Org = Org;
         this.Logged = Logged;
         this.LoggedDate = LoggedDate;
     }
@@ -88,12 +88,12 @@ public class User {
         this.Token = Token;
     }
 
-    public String getStatus() {
-        return Status;
+    public String getOrg() {
+        return Org;
     }
 
-    public void setStatus(String Status) {
-        this.Status = Status;
+    public void setOrg(String Org) {
+        this.Org = Org;
     }
 
     public Boolean getLogged() {
