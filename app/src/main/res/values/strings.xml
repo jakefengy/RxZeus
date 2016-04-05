@@ -1,3 +1,101 @@
 <resources>
     <string name="app_name">RxZeus</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="login_username">邮箱/手机号/用户名</string>
+    <string name="login_psw">密码</string>
+    <string name="login_set_org">设置主机号</string>
+    <string name="login_action_login">登  录</string>
+
+    <!--Activity_Home-->
+    <string name="home_office">办公</string>
+    <string name="home_communication">沟通</string>
+    <string name="home_contacts">通讯录</string>
+    <string name="home_subscription">订阅</string>
+    <string name="home_me">我</string>
+    <string name="home_menu_add">扫一扫</string>
+    <string name="home_menu_todo">日程</string>
+    <string name="home_menu_apply">申请</string>
+    <string name="home_menu_contacts">通讯录</string>
+
+    <string name="hint_find">输入姓名/手机号进行查询</string>
+
+    <!--Activity_Contacts-->
+    <string name="contacts_colleague">同事</string>
+    <string name="contacts_groups">群组</string>
+    <string name="contacts_business_card">名片夹</string>
+    <string name="contacts_menu">搜索</string>
+
+    <string name="contacts_menu_group">组织结构树</string>
+    <string name="contacts_menu_scan">扫一扫</string>
+    <string name="contacts_menu_add_card">添加名片</string>
+    <string name="contacts_menu_add_newgroup">创建小组</string>
+
+    <string name="actionbar_bottom_chat">进入会话</string>
+    <string name="actionbar_bottom_history">联系记录</string>
+    <string name="actionbar_bottom_save">保存</string>
+    <string name="actionbar_bottom_send">发送名片</string>
+    <string name="actionbar_bottom_comfirm">确定</string>
+    <string name="actionbar_bottom_delete">删除</string>
+    <string name="actionbar_bottom_edit">修改</string>
+    <string name="actionbar_bottom_exit">退出讨论组</string>
+    <string name="actionbar_bottom_dismiss">解散讨论组</string>
+    <string name="actionbar_bottom_original">原图</string>
+
+    <string name="hint">Type emoji here</string>
+    <string name="i_love_emojicon">I\ue32demojicon</string>
+    <string name="use_system_default">Use system default emojicon</string>
+    <string name="actionbar_ordinary_add">我添加的任务</string>
+    <string name="actionbar_ordinary_recieve">我收到的任务</string>
+    <string name="actionbar_ordinary_action">我的动态</string>
+    <string name="actionbar_ordinary_about">关于</string>
+    <string name="actionbar_ordinary_set">设置</string>
+    <string name="actionbar_ordinary_deletecache">清除在线缓存</string>
+    <string name="actionbar_ordinary_log">本地运行日志</string>
+    <string name="title_activity_activity__setting">Activity_Setting</string>
+
+    <string name="about_introduce">功能介绍</string>
+    <string name="about_feedback">帮助与反馈</string>
+    <string name="about_check">版本更新</string>
+    <string name="about_already_newest">已是最新版本</string>
+
+    <string name="btn_text_send">发送</string>
+
+    <!--Activity namecard_edit-->
+    <string name="namecard_edit_info">个人信息</string>
+    <string name="namecard_edit_name">姓名</string>
+    <string name="namecard_edit_phone">电话</string>
+    <string name="namecard_edit_mail">邮件</string>
+    <string name="namecard_edit_info_company">企业信息</string>
+    <string name="namecard_edit_name_company">企业名称</string>
+    <string name="namecard_edit_dept">部门名称</string>
+    <string name="namecard_edit_post">岗位名称</string>
+
+    <!--Activity setup-->
+    <string name="setup_application">聊天</string>
+    <string name="setup_default">是否将应用桌面设置为默认页</string>
+    <string name="setup_loading">Wif环境下自动预下载更新</string>
+    <string name="setup_delete">下载安装成功后删除安装包</string>
+    <string name="setup_info">应用消息推送</string>
+    <string name="setup_sys">系统</string>
+
+    <!--choosemore-->
+    <string name="choosemore_photo">拍照</string>
+    <string name="choosemore_picture">图片</string>
+    <string name="choosemore_location">位置</string>
+    <string name="choosemore_card">名片</string>
+    <string name="choosemore_task">任务</string>
+    <string name="choosemore_leave">请假</string>
+    <string name="choosemore_sendcard">发送名片</string>
+
+    <!--contact-->
+    <string name="contact_search">输入名字或名字缩写、手机号搜索</string>
+    <string name="contact_card">名片</string>
+    <string name="contact_group">讨论组</string>
+    <string name="contact_org">组织结构</string>
+
+    <!--Fragment_me-->
+    <string name="me_out">登出</string>
 </resources>

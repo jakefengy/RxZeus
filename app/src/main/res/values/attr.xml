@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--图片资源-->
+    <attr name="logo_login" format="reference" />
+    <attr name="logo_about" format="reference" />
+    <attr name="chat_error" format="reference" />
+    <attr name="chat_image_loading" format="reference" />
+    <attr name="chat_more_card" format="reference" />
+    <attr name="chat_more_image" format="reference" />
+    <attr name="chat_more_leave" format="reference" />
+    <attr name="chat_more_location" format="reference" />
+    <attr name="chat_more_photo" format="reference" />
+    <attr name="chat_more_task" format="reference" />
+    <attr name="chat_sendbar_emoji" format="reference" />
+    <attr name="chat_sendbar_hide" format="reference" />
+    <attr name="chat_sendbar_more" format="reference" />
+    <attr name="chat_sendbar_ok" format="reference" />
+    <attr name="chat_sendbar_say" format="reference" />
+    <attr name="colleague_card_back" format="reference" />
+    <attr name="colleague_card_switch" format="reference" />
+    <attr name="common_back" format="reference" />
+    <attr name="commom_add_gray" format="reference" />
+    <attr name="commom_back_gray" format="reference" />
+    <attr name="common_clear_gray" format="reference" />
+    <attr name="common_menu_gray" format="reference" />
+    <attr name="common_search_gray" format="reference" />
+    <attr name="common_voice_gray" format="reference" />
+    <attr name="contacts_head_card" format="reference" />
+    <attr name="contacts_head_group" format="reference" />
+    <attr name="contacts_head_man" format="reference" />
+    <attr name="contacts_head_woman" format="reference" />
+    <attr name="fab_icon_add" format="reference" />
+    <attr name="fab_icon_contacts" format="reference" />
+    <attr name="fab_icon_edit" format="reference" />
+    <attr name="fab_icon_plus" format="reference" />
+    <attr name="fab_icon_todo" format="reference" />
+    <attr name="ic_close" format="reference" />
+    <attr name="ic_menu" format="reference" />
+    <attr name="ic_progress" format="reference" />
+    <attr name="ic_star" format="reference" />
+    <attr name="icon_back" format="reference" />
+    <attr name="icon_card" format="reference" />
+    <attr name="icon_delete" format="reference" />
+    <attr name="icon_modify" format="reference" />
+    <attr name="icon_expression_normal" format="reference" />
+    <attr name="icon_add" format="reference" />
+    <attr name="icon_send" format="reference" />
+    <attr name="icon_history" format="reference" />
+    <attr name="icon_masssage" format="reference" />
+    <attr name="icon_phone" format="reference" />
+    <attr name="icon_inchat" format="reference" />
+    <attr name="login_bg" format="reference" />
+    <attr name="common_phone" format="reference" />
+    <attr name="common_message" format="reference" />
+    <attr name="chat_left" format="reference" />
+    <attr name="chat_right" format="reference" />
+    <attr name="personalcard_phone" format="reference" />
+    <attr name="personalcard_message" format="reference" />
+    <attr name="personalcard_location" format="reference" />
+    <attr name="namecard_card" format="reference" />
+    <attr name="namecard_org" format="reference" />
+    <attr name="namecard_group" format="reference" />
+    <attr name="namecard_search" format="reference" />
+    <attr name="overflow" format="reference" />
+    <attr name="search" format="reference" />
+    <attr name="preview" format="reference" />
+    <attr name="fab_group" format="reference" />
+
+    <!--颜色资源-->
+    <!--text-->
+    <!--<attr name="color_text_theme" format="reference"/>//主题主要文字-->
+    <attr name="color_text_function" format="color" />
+    //功能文字颜色：chatmore、title文字颜色等
+    <!--<attr name="color_text_unfocus" format="color"/>  //未获关注文字颜色：tab未获关注文字颜色等-->
+    <attr name="color_text_bottom" format="color" />
+    //底部按钮文字颜色
+    <!--<attr name="color_text_bottompressde" format="color"/> //底部按钮文字获得关注颜色-->
+    <!--background-->
+    <attr name="color_bg_commom" format="color" />
+    //普通背景颜色
+    <attr name="color_bg_floatmenu" format="color" />
+    //浮动菜单颜色
+    <attr name="color_bg_floatmenupressed" format="color" />
+    //获得关注浮动菜单颜色
+    <attr name="color_bg_sendbar" format="color" />
+    //聊天输入框颜色
+    <!--<attr name="color_bg_cardview" format="color"/>  //卡片样式背景颜色-->
+    <!--<attr name="color_bg_searchtransparent" format="color"/>  //搜索栏蒙版颜色-->
+    <!--蒙版及阴影-->
+    <attr name="color_transparent_icon" format="color" />
+    //icon蒙版颜色
+    <!--<attr name="color_transparent_commom" format="color"/> //普通蒙版-->
+    <attr name="color_transparent_deep" format="color" />
+    //深色蒙版
+    <!--<attr name="color_shadow_1" format="color"/> //阴影1-->
+    <!--<attr name="color_shadow_2" format="color"/> //阴影2-->
+    <attr name="color_transparent" format="color" />
+    //透明
+    <attr name="color_transparent_half" format="color" />
+    //半透明
+    <!--图形资源-->
+    <attr name="drable_chat_circlephone" format="reference" />
+    //chat页面中电话按钮背景圆形
+    <attr name="drable_chat_circle" format="reference" />
+    //chat页面中senderbar的圆角
+    <attr name="drable_common_circle" format="reference" />
+    //普通圆角
+    <attr name="drable_common_cardview" format="reference" />
+    //卡片样式
+    <attr name="drable_login_circle" format="reference" />
+    //首页登陆按钮圆角
+    <attr name="drable_personal_circle" format="reference" />
+    //个人信息页面中头像圆
+    <attr name="drable_choosemore_framgement" format="reference" />//choosemore蒙版框架
+    <attr name="drable_remind_circle" format="reference" />//未读消息提醒圆形
+
+    <declare-styleable name="CircleImageView">
+        <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_color" format="color" />
+        <attr name="civ_border_overlay" format="boolean" />
+        <attr name="civ_fill_color" format="color" />
+    </declare-styleable>
+
+</resources>

@@ -1,11 +1,361 @@
 <resources>
+    <!--页面开关动画-->
+    <style name="AnimationActivity" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/anim_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/anim_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/back_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/back_exit</item>
+    </style>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="PopupAnimation" mce_bogus="1" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/popup_enter</item>
+        <item name="android:windowExitAnimation">@anim/popup_exit</item>
+    </style>
+
+    <style name="CustomWindowTitleText" parent="android:TextAppearance.WindowTitle">
+        <item name="android:textSize">20dip</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold|italic</item>
+    </style>
+
+    <!--组件样式-->
+
+    //输入框
+
+    <style name="ed_commom">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">?colorAccent</item>
+        <item name="android:textSize">@dimen/text_size_xl</item>
+        <item name="android:textColorHint">?android:textColorSecondary</item>
+    </style>
+    //文本框
+
+    <style name="tv_title">//标题性文本
+        <item name="android:textColor">?android:textColorTertiary</item>
+        <item name="android:textSize">@dimen/text_size_xl</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="tv_remind">//标注性文本
+        <item name="android:layout_marginTop">@dimen/margin_s</item>
+        <item name="android:layout_marginBottom">@dimen/margin_s</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:textSize">@dimen/text_size_xs</item>
+    </style>
+
+    <style name="tv_commom">//普通文本
+        <item name="android:textSize">@dimen/text_size_m</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="tv_ripple">//带波纹效果的文本
+        <item name="android:textSize">@dimen/text_size_m</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="tv_ripple_listitem" parent="tv_ripple">//列表引用文本
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginLeft">@dimen/margin_m</item>
+    </style>
+
+    <style name="tv_ripple_ToggleButton" parent="tv_ripple">//spanner文本
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/height_2xm</item>
+        <item name="android:checked">true</item>
+    </style>
+
+    <style name="tv_ripple_bottom" parent="tv_ripple">
+        <item name="android:textColor">?attr/color_text_bottom</item>
+        <item name="android:layout_marginLeft">@dimen/margin_m</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="tv_withframe">//带背景框文本
+        <item name="android:textSize">@dimen/text_size_m</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/drable_common_circle</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:textColor">?android:textColorTertiary</item>
+
+    </style>
+
+    <style name="tv_chat_item_text">//聊天文本
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?android:textColorTertiary</item>
+        <item name="android:textSize">@dimen/text_size_m</item>
+    </style>
+
+    <style name="tv_chat_item_time">//聊天时间文本
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_s</item>
+        <item name="android:textColor">?android:textColorTertiary</item>
+        <item name="android:textSize">@dimen/text_size_s</item>
+    </style>
+
+    //图片
+
+    <style name="iv_chat_item_image_left">
+        <item name="android:layout_width">@dimen/width_m</item>
+        <item name="android:layout_height">@dimen/height_m</item>
+        <item name="android:layout_alignParentLeft">true</item>
+    </style>
+
+    <style name="iv_chat_item_image_right">
+        <item name="android:layout_width">@dimen/width_m</item>
+        <item name="android:layout_height">@dimen/height_m</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+
+    <style name="iv_bottom">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/margin_m</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+    //toolbar
+
+    <style name="toolbar">
+        <item name="android:textSize">@dimen/text_size_xl</item>
+        <item name="android:textColor">?android:textColorTertiary</item>
+    </style>
+    //头像剪裁
+    <declare-styleable name="RoundedImageView">
+        <attr name="riv_corner_radius" format="dimension" />
+        <attr name="riv_corner_radius_top_left" format="dimension" />
+        <attr name="riv_corner_radius_top_right" format="dimension" />
+        <attr name="riv_corner_radius_bottom_left" format="dimension" />
+        <attr name="riv_corner_radius_bottom_right" format="dimension" />
+        <attr name="riv_border_width" format="dimension" />
+        <attr name="riv_border_color" format="color" />
+        <attr name="riv_mutate_background" format="boolean" />
+        <attr name="riv_oval" format="boolean" />
+        <attr name="android:scaleType" />
+        <attr name="riv_tile_mode">
+            <enum name="clamp" value="0" />
+            <enum name="repeat" value="1" />
+            <enum name="mirror" value="2" />
+        </attr>
+        <attr name="riv_tile_mode_x">
+            <enum name="clamp" value="0" />
+            <enum name="repeat" value="1" />
+            <enum name="mirror" value="2" />
+        </attr>
+        <attr name="riv_tile_mode_y">
+            <enum name="clamp" value="0" />
+            <enum name="repeat" value="1" />
+            <enum name="mirror" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <!--容器样式-->
+    //线性框架
+
+    <style name="ll_chat_content_left">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/chat_left</item>
+    </style>
+
+    <style name="ll_chat_content_right">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/chat_right</item>
+        <item name="android:layout_marginRight">@dimen/margin_m</item>
+    </style>
+
+    <style name="ll_namecard_edit">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">?attr/color_bg_commom</item>
+        <item name="android:paddingBottom">@dimen/margin_s</item>
+        <item name="android:paddingLeft">@dimen/margin_m</item>
+        <item name="android:paddingRight">@dimen/margin_m</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+    //recycleview
+
+    <style name="rc_base">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="rc_putitem" parent="rc_base">
+        <item name="android:animationCache">?attr/color_transparent</item>??
+        <item name="android:listSelector">?attr/color_transparent</item>??
+        <item name="android:divider">@null</item>
+        <item name="android:scrollbars">none</item>
+    </style>
+
+    <style name="rc_putitem_notcardview" parent="rc_putitem">
+        <item name="android:background">?attr/color_bg_commom</item>
+    </style>
+
+    <!--theme blue-->
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/theme_primary</item>
+        <item name="colorPrimaryDark">@color/theme_primary</item>
+        <item name="colorAccent">@color/theme_second</item>
+        <item name="colorControlHighlight">@color/bg_gray_ripple</item>
+        <item name="android:windowBackground">@color/bg_back</item>
+        <item name="android:textColorPrimary">@color/bg_black</item>
+        <item name="android:textColorSecondary">@color/bg_gray</item>
+        <item name="android:textColorTertiary">@color/white</item>
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+        <!--颜色资源-->
+        <!--text-->
+        <item name="color_text_function">@color/theme_chatmore</item>
+        <item name="color_text_bottom">@color/theme_bottom</item>
+        <!--background-->
+        <item name="color_bg_commom">@color/white</item>
+        <item name="color_bg_floatmenu">@color/theme_floatmenu</item>
+        <item name="color_bg_floatmenupressed">@color/theme_floatmenu_pressed</item>
+        <item name="color_bg_sendbar">@color/theme_chatbg</item>
+        <!--蒙版及阴影-->
+        <item name="color_transparent_icon">@color/pressed_white</item>
+        <item name="color_transparent_deep">@color/bg_black_transparent</item>
+        <item name="color_transparent">@color/bg_transparent</item>
+        <item name="color_transparent_half">@color/bg_transparent_half</item>
+        <!--图片资源-->
+        <item name="logo_login">@mipmap/login_logo</item>
+        <item name="logo_about">@mipmap/login_logo</item>
+        <item name="chat_error">@mipmap/chat_error</item>
+        <item name="chat_image_loading">@mipmap/chat_image_loading</item>
+        <item name="chat_more_card">@mipmap/chat_more_card</item>
+        <item name="chat_more_image">@mipmap/chat_more_image</item>
+        <item name="chat_more_leave">@mipmap/chat_more_leave</item>
+        <item name="chat_more_location">@mipmap/chat_more_location</item>
+        <item name="chat_more_photo">@mipmap/chat_more_photo</item>
+        <item name="chat_more_task">@mipmap/chat_more_task</item>
+        <item name="chat_sendbar_emoji">@drawable/chat_sendbar_emoji</item>
+        <item name="chat_sendbar_hide">@mipmap/chat_sendbar_hide</item>
+        <item name="chat_sendbar_more">@drawable/chat_sendbar_more</item>
+        <item name="chat_sendbar_ok">@drawable/chat_sendbar_ok</item>
+        <item name="chat_sendbar_say">@mipmap/chat_sendbar_say</item>
+        <item name="colleague_card_back">@mipmap/colleague_card_back</item>
+        <item name="colleague_card_switch">@mipmap/colleague_card_switch</item>
+        <item name="commom_add_gray">@mipmap/common_add_gray</item>
+        <item name="commom_back_gray">@mipmap/common_back_gray</item>
+        <item name="common_clear_gray">@mipmap/common_clear_gray</item>
+        <item name="common_menu_gray">@mipmap/common_menu_gray</item>
+        <item name="common_search_gray">@mipmap/common_search_gray</item>
+        <item name="common_voice_gray">@mipmap/common_voice_gray</item>
+        <item name="contacts_head_card">@mipmap/contacts_head_card</item>
+        <item name="contacts_head_group">@mipmap/contacts_head_group</item>
+        <item name="contacts_head_man">@mipmap/contacts_head_man</item>
+        <item name="contacts_head_woman">@mipmap/contacts_head_woman</item>
+        <item name="fab_icon_add">@mipmap/fab_icon_add</item>
+        <item name="fab_icon_contacts">@mipmap/fab_icon_contacts</item>
+        <item name="fab_icon_edit">@mipmap/fab_icon_edit</item>
+        <item name="fab_icon_plus">@mipmap/fab_icon_plus</item>
+        <item name="fab_icon_todo">@mipmap/fab_icon_todo</item>
+        <item name="ic_close">@mipmap/ic_close</item>
+        <item name="ic_menu">@mipmap/ic_menu</item>
+        <item name="ic_progress">@mipmap/ic_progress</item>
+        <item name="ic_star">@mipmap/ic_star</item>
+        <item name="icon_back">@mipmap/icon_back</item>
+        <item name="icon_card">@mipmap/icon_card</item>
+        <item name="icon_delete">@mipmap/icon_delete</item>
+        <item name="icon_history">@mipmap/icon_history</item>
+        <item name="icon_masssage">@mipmap/icon_masssage</item>
+        <item name="icon_phone">@mipmap/icon_phone</item>
+        <item name="icon_modify">@mipmap/icon_modify</item>
+        <item name="icon_inchat">@mipmap/icon_inchat</item>
+        <item name="login_bg">@mipmap/login_bg</item>
+        <item name="common_phone">@mipmap/common_phone</item>
+        <item name="common_message">@mipmap/common_message</item>
+        <item name="common_back">@mipmap/common_back</item>
+        <item name="chat_left">@drawable/chat_left</item>
+        <item name="chat_right">@drawable/chat_right</item>
+        <item name="personalcard_phone">@mipmap/pc_phone</item>
+        <item name="personalcard_message">@mipmap/pc_message</item>
+        <item name="personalcard_location">@mipmap/pc_location</item>
+        <item name="namecard_card">@mipmap/namecard_card</item>
+        <item name="namecard_org">@mipmap/namecard_org</item>
+        <item name="namecard_search">@mipmap/namecard_search</item>
+        <item name="namecard_group">@mipmap/namecard_group</item>
+        <item name="overflow">@mipmap/overflow_add</item>
+        <item name="search">@mipmap/ic_search_white</item>
+        <item name="preview">@mipmap/common_preview</item>
+        <item name="fab_group">@mipmap/fab_group</item>
+        <item name="icon_expression_normal">@mipmap/icon_expression_normal</item>
+        <item name="icon_send">@mipmap/icon_send</item>
+        <item name="icon_add">@mipmap/icon_add</item>
+        <!--图形资源-->
+        <item name="drable_chat_circlephone">@drawable/circle_phone</item>
+        <item name="drable_chat_circle">@drawable/round_chat</item>
+        <item name="drable_common_circle">@drawable/common_bg_round_green</item>
+        <item name="drable_common_cardview">@drawable/common_cardview_noside_bg</item>
+        <item name="drable_login_circle">@drawable/common_button_bg</item>
+        <item name="drable_personal_circle">@drawable/common_circle</item>
+        <item name="drable_choosemore_framgement">@drawable/orgs_button_bg</item>
+        <item name="drable_remind_circle">@drawable/remind_circle</item>
+    </style>
+
+    <style name="keyboard_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    //cardview
+
+    <style name="card_commom">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginLeft">@dimen/card_margin</item>
+        <item name="android:layout_marginRight">@dimen/card_margin</item>
+        <item name="android:layout_marginTop">@dimen/card_margin</item>
+        <item name="android:layout_marginBottom">@dimen/card_margin</item>
+    </style>
+
+    //普通布局白色背景
+
+    <style name="layout_commom_white">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="card_login">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/margin_l</item>
+        <item name="android:layout_marginRight">@dimen/margin_l</item>
+        <item name="android:layout_marginTop">88dp</item>
+    </style>
+
+    //动作条
+
+    <style name="actionbar_base">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="actionbar_ordinay_ripplelayout" parent="actionbar_base">
+        <item name="android:layout_height">@dimen/height_2xm</item>
+    </style>
+
+    <style name="actionbar_bottom_ripplelayout" parent="actionbar_base">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:visibility">gone</item>
     </style>
 
 </resources>

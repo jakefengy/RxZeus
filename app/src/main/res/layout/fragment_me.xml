@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:id="@+id/rl_header"
+            style="@style/layout_commom_white"
+            android:layout_marginTop="@dimen/margin_m"
+            android:padding="@dimen/margin_m">
+
+            <com.xm.zeus.extend.CircleImageView
+                android:id="@+id/iv_fragment_me"
+                android:layout_width="@dimen/width_5xm"
+                android:layout_height="@dimen/height_5xm"
+                android:src="?attr/contacts_head_man" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/iv_fragment_me"
+                android:layout_toRightOf="@+id/iv_fragment_me"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_fragment_me_name"
+                    style="@style/tv_title"
+                    android:layout_marginLeft="@dimen/margin_m"
+                    android:text="fengy"
+                    android:textColor="?android:textColorPrimary" />
+
+                <TextView
+                    android:id="@+id/tv_fragment_me_motto"
+                    style="@style/tv_remind"
+                    android:layout_marginLeft="@dimen/margin_m"
+                    android:text="且放白鹿青崖间"
+                    android:textSize="@dimen/text_size_m" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            style="@style/layout_commom_white"
+            android:layout_marginTop="@dimen/margin_m"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rl_action_botton_set"
+                style="@style/actionbar_ordinay_ripplelayout">
+
+                <TextView
+                    style="@style/tv_ripple_listitem"
+                    android:text="@string/actionbar_ordinary_set" />
+            </RelativeLayout>
+
+            <include layout="@layout/view_divider_line_horizontal" />
+
+            <RelativeLayout
+                android:id="@+id/rl_action_botton_about"
+                style="@style/actionbar_ordinay_ripplelayout">
+
+                <TextView
+                    style="@style/tv_ripple_listitem"
+                    android:text="@string/actionbar_ordinary_about" />
+
+                <ImageView
+                    android:id="@+id/iv_about_remind"
+                    android:layout_width="@dimen/dp10"
+                    android:layout_height="@dimen/dp10"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/dp10"
+                    android:background="@drawable/tab_remind_bg" />
+
+            </RelativeLayout>
+
+            <include layout="@layout/view_divider_line_horizontal" />
+
+            <RelativeLayout
+                android:id="@+id/btn_login_out"
+                style="@style/actionbar_ordinay_ripplelayout">
+
+                <TextView
+                    style="@style/tv_ripple_listitem"
+                    android:text="@string/me_out" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

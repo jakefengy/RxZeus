@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <!--蓝色主题-->
+    <color name="theme_primary">#5c6bc0</color>  //主要颜色
+    <color name="theme_second">#87b2ff</color>   //次要颜色
+    <color name="white">#ffffff</color>//windowbackground颜色
+    <color name="bg_gray_ripple">#585858</color>  //涟漪效果颜色
+    <color name="bg_black">#4c4c4c</color>   //主要文字颜色
+    <color name="text_white">#ffffff</color> //次要文字颜色
+    <color name="bg_gray">#b4b4b4</color> //标注性文字颜色
+    <color name="bg_back">#f0f0f0</color>  //windowsback颜色
+
+    <color name="theme_chatmore">#626262</color>//chatmore中icon下文字颜色、分组提示栏文字颜色
+    <color name="bg_white_light">#7FFFFFFF</color>  //tab未获得关注时文字颜色
+    <color name="theme_bottom">#6d7dc8</color>   //底部按钮文字颜色
+    <color name="theme_button_pressed">#769eeb</color>  //底部按钮获得关注时颜色
+
+    <color name="theme_floatmenu">#df7795</color>  //浮动菜单颜色
+    <color name="theme_floatmenu_pressed">#d47490</color>  //浮动菜单颜色
+    <color name="theme_chatbg">#76d5f2ff</color>   //聊天输入框背景颜色
+    <color name="card_background">#ffffff</color>//卡片样式背景颜色
+    <color name="theme_chatputbg">#bababa</color>//聊天组退出提醒背景
+    <!--<color name="bg_blue_transparent">#805996cd</color>  //搜索框蒙版颜色-->
+
+    <color name="pressed_white">#ececec</color>  //聊天输入栏icon蒙版颜色
+    <color name="bg_white_transparent">#ccffffff</color>
+    <color name="bg_black_transparent">#cc4c4c4c</color>
+    <color name="bg_transparent">#00000000</color>  //全透明颜色值
+    <color name="bg_transparent_half">#10000000</color> //半透明颜色值
+    <color name="card_shadow_1">#d4d4d4</color>
+    <color name="card_shadow_2">#dddddd</color>
+
+    <color name="spilt_line">#CFCFCF</color>
+    <color name="btn_send_textcolor">@color/white</color>
+    <color name="btn_select">#888888</color>
+    <color name="common_bg">@color/white</color>
 </resources>

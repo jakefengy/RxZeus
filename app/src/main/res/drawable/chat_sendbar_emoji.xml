@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="false" android:state_pressed="false">
+        <bitmap android:gravity="center" android:src="@mipmap/chat_sendbar_emoji_0"></bitmap>
+    </item>
+    <item android:state_checked="false" android:state_pressed="true">
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/bg_transparent_half"></solid>
+                </shape>
+            </item>
+            <item>
+                <bitmap android:gravity="center" android:src="@mipmap/chat_sendbar_emoji_0"></bitmap>
+            </item>
+        </layer-list>
+    </item>
+    <item android:state_checked="true" android:state_pressed="false">
+        <bitmap android:gravity="center" android:src="@mipmap/chat_sendbar_emoji"></bitmap>
+    </item>
+    <item android:state_checked="true" android:state_pressed="true">
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/bg_transparent_half"></solid>
+                </shape>
+            </item>
+            <item>
+                <bitmap android:gravity="center" android:src="@mipmap/chat_sendbar_emoji"></bitmap>
+            </item>
+        </layer-list>
+    </item>
+</selector>
