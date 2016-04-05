@@ -93,6 +93,7 @@ public class LoginInteractorImpl implements ILoginInteractor {
                         user.setUserId(loginResult.getUid());
                         user.setToken(loginResult.getAccessToken());
                         user.setLogged(true);
+                        user.setAutoLogin(true);
                         saveLoggedUser(user);
                         return user;
                     }

@@ -2,6 +2,7 @@ package com.xm.zeus.app;
 
 import android.app.Application;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.xm.zeus.db.AppDbHelper;
 
 /**
@@ -16,5 +17,6 @@ public class App extends Application {
         super.onCreate();
         instance = this;
         AppDbHelper.getInstance().init(this);
+        Fresco.initialize(this);
     }
 }

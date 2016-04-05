@@ -11,11 +11,10 @@ import com.xm.zeus.R;
 import com.xm.zeus.app.Constant;
 import com.xm.zeus.utils.Logger;
 import com.xm.zeus.utils.Tip;
-import com.xm.zeus.utils.Utils;
+import com.xm.zeus.view.home.view.Activity_Home;
+import com.xm.zeus.view.login.iview.ILoginView;
 import com.xm.zeus.view.login.presenter.ILoginPresenter;
 import com.xm.zeus.view.login.presenter.LoginPresenterImpl;
-
-import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -56,7 +55,9 @@ public class Activity_Login extends AppCompatActivity implements ILoginView {
 
     @Override
     public void toHome() {
-        Logger.i(TAG, "toHome");
+        Intent intent = Activity_Home.getHomeIntent(Activity_Login.this);
+        startActivity(intent);
+        finish();
     }
 
     @Override

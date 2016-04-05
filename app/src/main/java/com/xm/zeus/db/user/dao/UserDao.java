@@ -30,7 +30,8 @@ public class UserDao extends AbstractDao<User, String> {
         public final static Property Token = new Property(3, String.class, "Token", false, "TOKEN");
         public final static Property Org = new Property(4, String.class, "Org", false, "ORG");
         public final static Property Logged = new Property(5, Boolean.class, "Logged", false, "LOGGED");
-        public final static Property LoggedDate = new Property(6, Long.class, "LoggedDate", false, "LOGGED_DATE");
+        public final static Property AutoLogin = new Property(6, Boolean.class, "AutoLogin", false, "AUTO_LOGIN");
+        public final static Property LoggedDate = new Property(7, Long.class, "LoggedDate", false, "LOGGED_DATE");
     };
 
     private DaoSession daoSession;
@@ -55,7 +56,8 @@ public class UserDao extends AbstractDao<User, String> {
                 "\"TOKEN\" TEXT," + // 3: Token
                 "\"ORG\" TEXT," + // 4: Org
                 "\"LOGGED\" INTEGER," + // 5: Logged
-                "\"LOGGED_DATE\" INTEGER);"); // 6: LoggedDate
+                "\"AUTO_LOGIN\" INTEGER," + // 6: AutoLogin
+                "\"LOGGED_DATE\" INTEGER);"); // 7: LoggedDate
     }
 
     /** Drops the underlying database table. */
@@ -99,9 +101,14 @@ public class UserDao extends AbstractDao<User, String> {
             stmt.bindLong(6, Logged ? 1L: 0L);
         }
  
+        Boolean AutoLogin = entity.getAutoLogin();
+        if (AutoLogin != null) {
+            stmt.bindLong(7, AutoLogin ? 1L: 0L);
+        }
+ 
         Long LoggedDate = entity.getLoggedDate();
         if (LoggedDate != null) {
-            stmt.bindLong(7, LoggedDate);
+            stmt.bindLong(8, LoggedDate);
         }
     }
 
@@ -127,7 +134,8 @@ public class UserDao extends AbstractDao<User, String> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // Token
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // Org
             cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // Logged
-            cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6) // LoggedDate
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // AutoLogin
+            cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7) // LoggedDate
         );
         return entity;
     }
@@ -141,7 +149,8 @@ public class UserDao extends AbstractDao<User, String> {
         entity.setToken(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setOrg(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setLogged(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
-        entity.setLoggedDate(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
+        entity.setAutoLogin(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
+        entity.setLoggedDate(cursor.isNull(offset + 7) ? null : cursor.getLong(offset + 7));
      }
     
     /** @inheritdoc */

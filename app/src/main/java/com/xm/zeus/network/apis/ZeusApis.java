@@ -6,6 +6,8 @@ import com.xm.zeus.db.app.entity.Group;
 import com.xm.zeus.db.app.entity.Org;
 import com.xm.zeus.network.entity.HttpResult;
 import com.xm.zeus.network.entity.LoginResult;
+import com.xm.zeus.view.home.entity.CheckVersionResult;
+import com.xm.zeus.view.home.entity.LoginOutResult;
 
 import java.util.List;
 
@@ -21,6 +23,14 @@ public interface ZeusApis {
     // 登录
     @GET("login")
     Observable<HttpResult<LoginResult>> login(@Query("username") String username, @Query("password") String password, @Query("organization") String organization, @Query("appkey") String appkey);
+
+    // 登出
+    @GET("logout")
+    Observable<HttpResult<LoginOutResult>> loginOut(@Query("AccessToken") String token, @Query("uid") String uid, @Query("organization") String org, @Query("appkey") String appkey);
+
+    // 获取软件更新信息
+    @GET("checkversion")
+    Observable<HttpResult<CheckVersionResult>> checkVersion(@Query("platform") String platform, @Query("version") String version);
 
     // 通讯录
 

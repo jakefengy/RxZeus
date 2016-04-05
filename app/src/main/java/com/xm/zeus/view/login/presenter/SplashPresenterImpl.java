@@ -11,7 +11,7 @@ import com.xm.zeus.network.extend.ApiSubscriber;
 import com.xm.zeus.utils.Logger;
 import com.xm.zeus.view.login.interactor.ISplashInteractor;
 import com.xm.zeus.view.login.interactor.SplashInteractorImpl;
-import com.xm.zeus.view.login.view.ISplashView;
+import com.xm.zeus.view.login.iview.ISplashView;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
 
@@ -58,7 +58,7 @@ public class SplashPresenterImpl implements ISplashPresenter {
     private void checkUserAndLogin() {
         Logger.i(TAG, "checkUserAndLogin");
         User user = interactor.getLastLoggedUser();
-        if (user == null || !user.getLogged()) {
+        if (user == null || !user.getLogged() || !user.getAutoLogin()) {
             // To login
             if (iview != null) {
                 iview.toLogin();

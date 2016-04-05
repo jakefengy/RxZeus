@@ -9,7 +9,7 @@ import com.xm.zeus.network.extend.ApiSubscriber;
 import com.xm.zeus.utils.Logger;
 import com.xm.zeus.view.login.interactor.ILoginInteractor;
 import com.xm.zeus.view.login.interactor.LoginInteractorImpl;
-import com.xm.zeus.view.login.view.ILoginView;
+import com.xm.zeus.view.login.iview.ILoginView;
 
 import java.util.Date;
 
@@ -62,7 +62,7 @@ public class LoginPresenterImpl implements ILoginPresenter {
                 loginView.error("密码有问题");
             return;
         }
-        if (interactor.checkNet(loginContext)) {
+        if (!interactor.checkNet(loginContext)) {
             if (loginView != null)
                 loginView.error("网络有问题");
             return;

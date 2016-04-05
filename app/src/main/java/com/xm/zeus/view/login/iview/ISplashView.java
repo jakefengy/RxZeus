@@ -1,4 +1,4 @@
-package com.xm.zeus.view.login.view;
+package com.xm.zeus.view.login.iview;
 
 /**
  * Created by lvxia on 2016-03-28.

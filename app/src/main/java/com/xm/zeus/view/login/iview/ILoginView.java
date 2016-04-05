@@ -1,4 +1,4 @@
-package com.xm.zeus.view.login.view;
+package com.xm.zeus.view.login.iview;
 
 
 public interface ILoginView {

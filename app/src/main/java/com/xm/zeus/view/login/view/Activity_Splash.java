@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.xm.zeus.R;
 import com.xm.zeus.utils.Logger;
+import com.xm.zeus.view.login.iview.ISplashView;
 import com.xm.zeus.view.login.presenter.ISplashPresenter;
 import com.xm.zeus.view.login.presenter.SplashPresenterImpl;
 

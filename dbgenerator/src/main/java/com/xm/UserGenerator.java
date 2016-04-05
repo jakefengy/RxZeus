@@ -38,6 +38,7 @@ public class UserGenerator {
         user.addStringProperty("Token");
         user.addStringProperty("Org");
         user.addBooleanProperty("Logged");
+        user.addBooleanProperty("AutoLogin");
         user.addLongProperty("LoggedDate");
     }
 

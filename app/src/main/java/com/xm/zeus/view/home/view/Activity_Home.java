@@ -71,6 +71,7 @@ public class Activity_Home extends AppCompatActivity {
         HomePagerAdapter adapter = new HomePagerAdapter(getSupportFragmentManager(), titles, pages);
         viewPager.setAdapter(adapter);
         tab.setupWithViewPager(viewPager);
+        viewPager.setOffscreenPageLimit(2);
     }
 
     @Override
