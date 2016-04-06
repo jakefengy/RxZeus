@@ -1,10 +1,5 @@
 package com.xm.zeus.network.extend;
 
-import android.content.Intent;
-
-import com.xm.zeus.app.App;
-import com.xm.zeus.view.login.view.Activity_Login;
-
 import rx.Subscriber;
 
 /**
@@ -15,18 +10,20 @@ public abstract class ApiSubscriber<T> extends Subscriber<T> {
     @Override
     public void onError(Throwable e) {
         if (e instanceof TokenException) {
-            onTokenError();
+            onTokenError(e);
         } else {
             onApiError(e);
         }
 
     }
 
+    @Override
+    public void onCompleted() {
+
+    }
+
     protected abstract void onApiError(Throwable e);
 
-    protected void onTokenError() {
-        Intent intent = Activity_Login.getLoginIntent(App.instance);
-        App.instance.startActivity(intent);
-    }
+    protected abstract void onTokenError(Throwable e);
 
 }

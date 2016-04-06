@@ -1,6 +1,11 @@
 package com.xm.zeus.network;
 
 import com.xm.zeus.db.user.entity.User;
+import com.xm.zeus.network.entity.HttpResult;
+import com.xm.zeus.network.extend.ApiException;
+import com.xm.zeus.network.extend.ApiSubscriber;
+import com.xm.zeus.network.extend.MapFunc1;
+import com.xm.zeus.network.extend.TokenException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +48,7 @@ public class RxJavaTest {
 
     /**
      * 生成连续数，range start to start + count -1
-     * <p>
+     * <p/>
      * range(2,5)  -> 2,3,4,5,6
      */
     private static void range(Subscriber<Integer> subscriber) {
@@ -52,7 +57,7 @@ public class RxJavaTest {
 
     /**
      * 每次subscribe(订阅)的时候，都会产生新的Observable，区别于Observable.just(input)
-     * <p>
+     * <p/>
      * onNext 1459321021710
      * onCompleted
      * onNext 1459321021717
@@ -406,18 +411,7 @@ public class RxJavaTest {
      * 将多个Observable合并
      */
     private static void merge() {
-        Observable<User> ob2 = Observable.create(new Observable.OnSubscribe<User>() {
-            @Override
-            public void call(Subscriber<? super User> subscriber) {
 
-                User user = new User();
-                user.setUserId("111");
-                subscriber.onNext(user);
-                user.setUserId("222");
-                subscriber.onNext(user);
-
-            }
-        });
         Observable<Integer> ob1 = Observable.create(new Observable.OnSubscribe<Integer>() {
             @Override
             public void call(Subscriber<? super Integer> subscriber) {
@@ -431,52 +425,65 @@ public class RxJavaTest {
             }
         });
 
-        System.out.println("----------Observable.merge");
+        Observable<User> ob2 = Observable.create(new Observable.OnSubscribe<User>() {
+            @Override
+            public void call(Subscriber<? super User> subscriber) {
 
-        Observable.merge(ob1, ob2)
-                .subscribe(new Subscriber<Object>() {
-                    @Override
-                    public void onCompleted() {
-                        System.out.println("onCompleted");
-                    }
+                User user = new User();
+                user.setUserId("111");
+                subscriber.onNext(user);
+                user.setUserId("222");
+                subscriber.onNext(user);
 
-                    @Override
-                    public void onError(Throwable e) {
-                        System.out.println("onError " + e.toString());
-                    }
+            }
+        });
 
-                    @Override
-                    public void onNext(Object o) {
-                        if (o instanceof User) {
-                            System.out.println("User " + ((User) o).getUserId());
-                        } else {
-                            System.out.println(o);
-                        }
-                    }
-                });
-
-        System.out.println("----------Observable.mergeDelayError");
-        Observable.mergeDelayError(ob1, ob2)
-                .subscribe(new Subscriber<Object>() {
-                    @Override
-                    public void onCompleted() {
-                        System.out.println("onCompleted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        System.out.println("onError " + e.toString());
-                    }
-
-                    @Override
-                    public void onNext(Object o) {
-                        if (o instanceof User) {
-                            System.out.println("User " + ((User) o).getUserId());
-                        } else {
-                            System.out.println(o);
-                        }
-                    }
-                });
+//        System.out.println("----------Observable.merge");
+//
+//        Observable.merge(ob1, ob2)
+//                .subscribe(new Subscriber<Object>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        System.out.println("onCompleted");
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        System.out.println("onError " + e.toString());
+//                    }
+//
+//                    @Override
+//                    public void onNext(Object o) {
+//                        if (o instanceof User) {
+//                            System.out.println("User " + ((User) o).getUserId());
+//                        } else {
+//                            System.out.println(o);
+//                        }
+//                    }
+//                });
+//
+//        System.out.println("----------Observable.mergeDelayError");
+//        Observable.mergeDelayError(ob1, ob2)
+//                .subscribe(new Subscriber<Object>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        System.out.println("onCompleted");
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        System.out.println("onError " + e.toString());
+//                    }
+//
+//                    @Override
+//                    public void onNext(Object o) {
+//                        if (o instanceof User) {
+//                            System.out.println("User " + ((User) o).getUserId());
+//                        } else {
+//                            System.out.println(o);
+//                        }
+//                    }
+//                });
 
         System.out.println("----------Observable.concat");
         Observable.concat(ob1, ob2)
@@ -1168,9 +1175,97 @@ public class RxJavaTest {
 
     }
 
+    private static void code() {
+
+        HttpResult<User> httpResult = new HttpResult<>();
+        User user = new User();
+        user.setUserId("111");
+        httpResult.setCode(1);
+        httpResult.setMessage("Right");
+        httpResult.setBody(user);
+
+        Observable.just(httpResult)
+                .flatMap(new Func1<HttpResult<User>, Observable<User>>() {
+                    @Override
+                    public Observable<User> call(HttpResult<User> result) {
+                        if (result.getCode() == 0) {
+                            return Observable.just(result.getBody());
+                        } else if (result.getCode() == 1) {
+                            return Observable.error(new TokenException("Token失效"));
+                        } else {
+                            return Observable.error(new ApiException("Api Exception"));
+                        }
+                    }
+                })
+                .subscribe(new ApiSubscriber<User>() {
+                    @Override
+                    protected void onApiError(Throwable e) {
+                        System.out.println("onApiError " + e.getMessage());
+                    }
+
+                    @Override
+                    protected void onTokenError(Throwable e) {
+                        System.out.println("onTokenError " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(User user) {
+                        System.out.println("onNext user id = " + user.getUserId());
+                    }
+                });
+
+    }
+
+    private static void compose() {
+
+        HttpResult<User> httpResult = new HttpResult<>();
+        User user = new User();
+        user.setUserId("compose");
+        httpResult.setCode(1);
+        httpResult.setMessage("Right");
+        httpResult.setBody(user);
+
+        Observable.Transformer transformer = new Observable.Transformer() {
+            @Override
+            public Object call(Object o) {
+                return ((Observable) o).flatMap(new Func1<HttpResult<User>, Observable<User>>() {
+                    @Override
+                    public Observable<User> call(HttpResult<User> result) {
+                        if (result.getCode() == 0) {
+                            return Observable.just(result.getBody());
+                        } else if (result.getCode() == 1) {
+                            return Observable.error(new TokenException("Token失效"));
+                        } else {
+                            return Observable.error(new ApiException("Api Exception"));
+                        }
+                    }
+                });
+            }
+        };
+
+        Observable.just(httpResult).compose(transformer).subscribe(new ApiSubscriber<User>() {
+            @Override
+            protected void onApiError(Throwable e) {
+                System.out.println("onApiError " + e.getMessage());
+            }
+
+            @Override
+            protected void onTokenError(Throwable e) {
+                System.out.println("onTokenError " + e.getMessage());
+            }
+
+            @Override
+            public void onNext(User user) {
+                System.out.println("onNext user id = " + user.getUserId());
+            }
+        });
+
+    }
+
+
     public static void main(String[] args) {
 
-        collect();
+        compose();
     }
 
 
