@@ -4,8 +4,8 @@ import com.xm.zeus.db.app.entity.Colleague;
 import com.xm.zeus.db.app.entity.Friend;
 import com.xm.zeus.db.app.entity.Group;
 import com.xm.zeus.db.app.entity.Org;
-import com.xm.zeus.network.entity.HttpResult;
-import com.xm.zeus.network.entity.LoginResult;
+import com.xm.zeus.network.entity.BaseEntity;
+import com.xm.zeus.view.login.entity.LoginResult;
 import com.xm.zeus.view.home.entity.CheckVersionResult;
 import com.xm.zeus.view.home.entity.LoginOutResult;
 
@@ -22,36 +22,36 @@ public interface ZeusApis {
 
     // 登录
     @GET("login")
-    Observable<HttpResult<LoginResult>> login(@Query("username") String username, @Query("password") String password, @Query("organization") String organization, @Query("appkey") String appkey);
+    Observable<BaseEntity<LoginResult>> login(@Query("username") String username, @Query("password") String password, @Query("organization") String organization, @Query("appkey") String appkey);
 
     // 登出
     @GET("logout")
-    Observable<HttpResult<LoginOutResult>> loginOut(@Query("AccessToken") String token, @Query("uid") String uid, @Query("organization") String org, @Query("appkey") String appkey);
+    Observable<BaseEntity<LoginOutResult>> loginOut(@Query("AccessToken") String token, @Query("uid") String uid, @Query("organization") String org, @Query("appkey") String appkey);
 
     // 获取软件更新信息
     @GET("checkversion")
-    Observable<HttpResult<CheckVersionResult>> checkVersion(@Query("platform") String platform, @Query("version") String version);
+    Observable<BaseEntity<CheckVersionResult>> checkVersion(@Query("platform") String platform, @Query("version") String version);
 
     // 通讯录
 
     // 获取同事
     @GET("getbusinesscontacts")
-    Observable<HttpResult<List<Colleague>>>
+    Observable<BaseEntity<List<Colleague>>>
     getColleague(@Query("AccessToken") String token, @Query("uid") String uid, @Query("organization") String org, @Query("timestamp") long timestamp, @Query("complete") String complete);
 
     // 获取好友
     @GET("getpersonalcontacts")
-    Observable<HttpResult<List<Friend>>>
+    Observable<BaseEntity<List<Friend>>>
     getFriends(@Query("AccessToken") String token, @Query("uid") String uid, @Query("organization") String org, @Query("timestamp") long timestamp, @Query("complete") String complete);
 
     // 获取群组
     @GET("getgrouplist")
-    Observable<HttpResult<List<Group>>>
+    Observable<BaseEntity<List<Group>>>
     getGroup(@Query("AccessToken") String token, @Query("uid") String uid, @Query("organization") String org);
 
     // 获取组织树
     @GET("getorgtree")
-    Observable<HttpResult<Org>>
+    Observable<BaseEntity<Org>>
     getOrgs(@Query("AccessToken") String token, @Query("uid") String uid, @Query("organization") String org);
 
 

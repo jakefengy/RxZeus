@@ -7,6 +7,7 @@ import com.xm.zeus.chat.Xmpp;
 import com.xm.zeus.db.app.entity.TimeStamp;
 import com.xm.zeus.db.app.helper.TimeStampHelper;
 import com.xm.zeus.db.user.entity.User;
+import com.xm.zeus.network.extend.ApiException;
 import com.xm.zeus.network.extend.ApiSubscriber;
 import com.xm.zeus.utils.Logger;
 import com.xm.zeus.view.login.interactor.ISplashInteractor;
@@ -118,9 +119,8 @@ public class SplashPresenterImpl implements ISplashPresenter {
             }
 
             @Override
-            public void onApiError(Throwable e) {
-                super.onError(e);
-                Logger.i(TAG, "downloadContacts.error");
+            public void onCommonError(Throwable e) {
+                Logger.i(TAG, "downloadContacts.onCommonError");
                 if (iview != null) {
                     iview.toHome();
                 }

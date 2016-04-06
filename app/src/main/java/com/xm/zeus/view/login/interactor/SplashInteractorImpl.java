@@ -16,7 +16,6 @@ import com.xm.zeus.db.user.entity.User;
 import com.xm.zeus.db.user.helper.UserHelper;
 import com.xm.zeus.network.Network;
 import com.xm.zeus.network.extend.ApiSubscriber;
-import com.xm.zeus.network.extend.MapFunc1;
 import com.xm.zeus.utils.Logger;
 import com.xm.zeus.utils.PinYin;
 
@@ -97,50 +96,63 @@ public class SplashInteractorImpl implements ISplashInteractor {
 
     @Override
     public boolean checkNetwork(Context context) {
-        return Network.isNetworkAvailable(context);
+        return Network.isAvailable(context);
     }
 
     @Override
-    public void downloadContacts(User user, long colleagueTS, long friendTS, ApiSubscriber subscriber) {
+    public void downloadContacts(final User user, final long colleagueTS, final long friendTS, ApiSubscriber subscriber) {
 
-        Observable<Boolean> obColleague = Network.getZeusApis().getColleague(user.getToken(), user.getUserId(), Constant.Organization, colleagueTS, "false")
-                .map(new MapFunc1<List<Colleague>>())
+        Network.getZeusApis().getColleague(user.getToken(), user.getUserId(), Constant.Organization, colleagueTS, "false")
+                .subscribeOn(Schedulers.io())
+                .compose(Network.<List<Colleague>>check())
                 .map(new Func1<List<Colleague>, Boolean>() {
                     @Override
                     public Boolean call(List<Colleague> colleagues) {
                         return processColleague(colleagues);
                     }
-                });
-
-        Observable<Boolean> obFriend = Network.getZeusApis().getFriends(user.getToken(), user.getUserId(), Constant.Organization, friendTS, "false")
-                .map(new MapFunc1<List<Friend>>())
-                .map(new Func1<List<Friend>, Boolean>() {
+                })
+                .compose(new Observable.Transformer<Boolean, Boolean>() {
                     @Override
-                    public Boolean call(List<Friend> friends) {
-                        return processFriend(friends);
+                    public Observable<Boolean> call(Observable<Boolean> booleanObservable) {
+                        return Network.getZeusApis().getFriends(user.getToken(), user.getUserId(), Constant.Organization, friendTS, "false")
+                                .subscribeOn(Schedulers.io())
+                                .compose(Network.<List<Friend>>check())
+                                .map(new Func1<List<Friend>, Boolean>() {
+                                    @Override
+                                    public Boolean call(List<Friend> friends) {
+                                        return processFriend(friends);
+                                    }
+                                });
                     }
-                });
-
-        Observable<Boolean> obOrg = Network.getZeusApis().getOrgs(user.getToken(), user.getUserId(), Constant.Organization)
-                .map(new MapFunc1<Org>())
-                .map(new Func1<Org, Boolean>() {
+                })
+                .compose(new Observable.Transformer<Boolean, Boolean>() {
                     @Override
-                    public Boolean call(Org org) {
-                        return processOrg(org);
+                    public Observable<Boolean> call(Observable<Boolean> booleanObservable) {
+                        return Network.getZeusApis().getOrgs(user.getToken(), user.getUserId(), Constant.Organization)
+                                .subscribeOn(Schedulers.io())
+                                .compose(Network.<Org>check())
+                                .map(new Func1<Org, Boolean>() {
+                                    @Override
+                                    public Boolean call(Org org) {
+                                        return processOrg(org);
+                                    }
+                                });
                     }
-                });
-
-        Observable<Boolean> obGroup = Network.getZeusApis().getGroup(user.getToken(), user.getUserId(), Constant.Organization)
-                .map(new MapFunc1<List<Group>>())
-                .map(new Func1<List<Group>, Boolean>() {
+                })
+                .compose(new Observable.Transformer<Boolean, Boolean>() {
                     @Override
-                    public Boolean call(List<Group> groups) {
-                        return processGroup(groups);
+                    public Observable<Boolean> call(Observable<Boolean> booleanObservable) {
+                        return Network.getZeusApis().getGroup(user.getToken(), user.getUserId(), Constant.Organization)
+                                .subscribeOn(Schedulers.io())
+                                .compose(Network.<List<Group>>check())
+                                .map(new Func1<List<Group>, Boolean>() {
+                                    @Override
+                                    public Boolean call(List<Group> groups) {
+                                        return processGroup(groups);
+                                    }
+                                });
                     }
-                });
-
-        Observable.concat(obColleague, obFriend, obGroup, obOrg)
-                .subscribeOn(Schedulers.io())
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
 

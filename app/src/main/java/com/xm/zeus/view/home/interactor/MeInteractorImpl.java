@@ -8,8 +8,6 @@ import com.xm.zeus.db.user.entity.User;
 import com.xm.zeus.db.user.helper.UserHelper;
 import com.xm.zeus.network.Network;
 import com.xm.zeus.network.extend.ApiSubscriber;
-import com.xm.zeus.network.extend.MapFunc1;
-import com.xm.zeus.network.extend.TokenException;
 import com.xm.zeus.view.home.entity.CheckVersionResult;
 import com.xm.zeus.view.home.entity.LoginOutResult;
 
@@ -43,7 +41,7 @@ public class MeInteractorImpl implements IMeInteractor {
                         if (user != null) {
                             subscriber.onNext(user);
                         } else {
-                            subscriber.onError(new TokenException("Not logged in user"));
+                            subscriber.onError(new Throwable("Not logged in user"));
                         }
                     }
                 })
@@ -59,8 +57,8 @@ public class MeInteractorImpl implements IMeInteractor {
     @Override
     public void checkAppVersion(ApiSubscriber<CheckVersionResult> subscriber) {
         Network.getZeusApis().checkVersion(Constant.Platform, BuildConfig.VERSION_NAME)
+                .compose(Network.<CheckVersionResult>check())
                 .subscribeOn(Schedulers.io())
-                .map(new MapFunc1<CheckVersionResult>())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
@@ -68,8 +66,8 @@ public class MeInteractorImpl implements IMeInteractor {
     @Override
     public void loginOut(ApiSubscriber<Boolean> subscriber) {
         Network.getZeusApis().loginOut(user.getToken(), user.getUserId(), user.getOrg(), "")
+                .compose(Network.<LoginOutResult>check())
                 .subscribeOn(Schedulers.io())
-                .map(new MapFunc1<LoginOutResult>())
                 .map(new Func1<LoginOutResult, Boolean>() {
                     @Override
                     public Boolean call(LoginOutResult loginOutResult) {

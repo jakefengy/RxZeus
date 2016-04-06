@@ -1,11 +1,10 @@
 package com.xm.zeus.network;
 
+import com.xm.zeus.db.app.entity.Friend;
 import com.xm.zeus.db.user.entity.User;
-import com.xm.zeus.network.entity.HttpResult;
+import com.xm.zeus.network.entity.BaseEntity;
 import com.xm.zeus.network.extend.ApiException;
 import com.xm.zeus.network.extend.ApiSubscriber;
-import com.xm.zeus.network.extend.MapFunc1;
-import com.xm.zeus.network.extend.TokenException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,7 @@ public class RxJavaTest {
 
     /**
      * 生成连续数，range start to start + count -1
-     * <p/>
+     * <p>
      * range(2,5)  -> 2,3,4,5,6
      */
     private static void range(Subscriber<Integer> subscriber) {
@@ -57,7 +56,7 @@ public class RxJavaTest {
 
     /**
      * 每次subscribe(订阅)的时候，都会产生新的Observable，区别于Observable.just(input)
-     * <p/>
+     * <p>
      * onNext 1459321021710
      * onCompleted
      * onNext 1459321021717
@@ -1175,88 +1174,49 @@ public class RxJavaTest {
 
     }
 
-    private static void code() {
-
-        HttpResult<User> httpResult = new HttpResult<>();
-        User user = new User();
-        user.setUserId("111");
-        httpResult.setCode(1);
-        httpResult.setMessage("Right");
-        httpResult.setBody(user);
-
-        Observable.just(httpResult)
-                .flatMap(new Func1<HttpResult<User>, Observable<User>>() {
-                    @Override
-                    public Observable<User> call(HttpResult<User> result) {
-                        if (result.getCode() == 0) {
-                            return Observable.just(result.getBody());
-                        } else if (result.getCode() == 1) {
-                            return Observable.error(new TokenException("Token失效"));
-                        } else {
-                            return Observable.error(new ApiException("Api Exception"));
-                        }
-                    }
-                })
-                .subscribe(new ApiSubscriber<User>() {
-                    @Override
-                    protected void onApiError(Throwable e) {
-                        System.out.println("onApiError " + e.getMessage());
-                    }
-
-                    @Override
-                    protected void onTokenError(Throwable e) {
-                        System.out.println("onTokenError " + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(User user) {
-                        System.out.println("onNext user id = " + user.getUserId());
-                    }
-                });
-
-    }
-
     private static void compose() {
 
-        HttpResult<User> httpResult = new HttpResult<>();
+        System.out.println("---------------user-----------------");
+
+        BaseEntity<User> baseEntity = new BaseEntity<>();
         User user = new User();
-        user.setUserId("compose");
-        httpResult.setCode(1);
-        httpResult.setMessage("Right");
-        httpResult.setBody(user);
+        user.setUserId("user 1");
+        baseEntity.setCode(0);
+        baseEntity.setMessage("Right");
+        baseEntity.setBody(user);
 
-        Observable.Transformer transformer = new Observable.Transformer() {
-            @Override
-            public Object call(Object o) {
-                return ((Observable) o).flatMap(new Func1<HttpResult<User>, Observable<User>>() {
-                    @Override
-                    public Observable<User> call(HttpResult<User> result) {
-                        if (result.getCode() == 0) {
-                            return Observable.just(result.getBody());
-                        } else if (result.getCode() == 1) {
-                            return Observable.error(new TokenException("Token失效"));
-                        } else {
-                            return Observable.error(new ApiException("Api Exception"));
-                        }
-                    }
-                });
-            }
-        };
-
-        Observable.just(httpResult).compose(transformer).subscribe(new ApiSubscriber<User>() {
-            @Override
-            protected void onApiError(Throwable e) {
-                System.out.println("onApiError " + e.getMessage());
-            }
+        Observable.just(baseEntity).compose(Network.<User>check()).subscribe(new ApiSubscriber<User>() {
 
             @Override
-            protected void onTokenError(Throwable e) {
-                System.out.println("onTokenError " + e.getMessage());
+            protected void onCommonError(Throwable e) {
+                System.out.println("onCommonError " + e.toString());
             }
 
             @Override
             public void onNext(User user) {
                 System.out.println("onNext user id = " + user.getUserId());
+            }
+        });
+
+        System.out.println("---------------friend-----------------");
+
+        BaseEntity<Friend> baseEntity2 = new BaseEntity<>();
+        Friend friend = new Friend();
+        friend.setUid("friend 2");
+        baseEntity2.setCode(1);
+        baseEntity2.setMessage("Right");
+        baseEntity2.setBody(friend);
+
+        Observable.just(baseEntity2).compose(Network.<Friend>check()).subscribe(new ApiSubscriber<Friend>() {
+
+            @Override
+            protected void onCommonError(Throwable e) {
+                System.out.println("onCommonError " + e.getMessage());
+            }
+
+            @Override
+            public void onNext(Friend user) {
+                System.out.println("onNext friend id = " + user.getUid());
             }
         });
 

@@ -6,17 +6,12 @@ import com.google.gson.Gson;
 import com.xm.zeus.db.app.entity.Colleague;
 import com.xm.zeus.db.app.entity.Setting;
 import com.xm.zeus.db.app.helper.SettingHelper;
-import com.xm.zeus.db.user.helper.UserHelper;
 import com.xm.zeus.network.Network;
 import com.xm.zeus.network.extend.ApiSubscriber;
-import com.xm.zeus.network.extend.MapFunc1;
 import com.xm.zeus.view.home.entity.CheckVersionResult;
-import com.xm.zeus.view.home.entity.LoginOutResult;
 import com.xm.zeus.view.home.interactor.IMeInteractor;
 import com.xm.zeus.view.home.interactor.MeInteractorImpl;
 import com.xm.zeus.view.home.iview.IMeView;
-
-import rx.Subscriber;
 
 /**
  * Created by lvxia on 2016-04-05.
@@ -43,13 +38,8 @@ public class MePresenterImpl implements IMePresenter {
 
         interactor.getUserInfo(new ApiSubscriber<Colleague>() {
             @Override
-            protected void onApiError(Throwable e) {
+            protected void onCommonError(Throwable e) {
                 callbackError(e);
-            }
-
-            @Override
-            public void onCompleted() {
-
             }
 
             @Override
@@ -64,7 +54,7 @@ public class MePresenterImpl implements IMePresenter {
     @Override
     public void checkAppVersion() {
 
-        if (!Network.isNetworkAvailable(context)) {
+        if (!Network.isAvailable(context)) {
             callbackError(new Throwable("网络不可用"));
             return;
         }
@@ -77,13 +67,8 @@ public class MePresenterImpl implements IMePresenter {
             }
 
             @Override
-            protected void onApiError(Throwable e) {
+            protected void onCommonError(Throwable e) {
                 callbackError(e);
-            }
-
-            @Override
-            public void onCompleted() {
-
             }
 
             @Override
@@ -109,20 +94,15 @@ public class MePresenterImpl implements IMePresenter {
     @Override
     public void loginOut() {
 
-        if (!Network.isNetworkAvailable(context)) {
+        if (!Network.isAvailable(context)) {
             callbackError(new Throwable("网络不可用"));
             return;
         }
 
         interactor.loginOut(new ApiSubscriber<Boolean>() {
             @Override
-            protected void onApiError(Throwable e) {
+            protected void onCommonError(Throwable e) {
                 callbackError(e);
-            }
-
-            @Override
-            public void onCompleted() {
-
             }
 
             @Override

@@ -33,6 +33,7 @@ public class Activity_Login extends AppCompatActivity implements ILoginView {
 
     public static Intent getLoginIntent(Context context) {
         Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.setClass(context, Activity_Login.class);
         return intent;
     }

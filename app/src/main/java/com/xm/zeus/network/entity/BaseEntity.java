@@ -3,7 +3,7 @@ package com.xm.zeus.network.entity;
 /**
  * Created by lvxia on 2016-03-22.
  */
-public class HttpResult<T> {
+public class BaseEntity<T> {
 
     private int Code;
     private String Message;

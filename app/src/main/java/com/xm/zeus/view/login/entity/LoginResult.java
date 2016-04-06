@@ -1,4 +1,4 @@
-package com.xm.zeus.network.entity;
+package com.xm.zeus.view.login.entity;
 
 /**
  * 登录结果

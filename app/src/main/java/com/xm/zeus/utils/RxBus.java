@@ -15,6 +15,8 @@ import rx.subjects.Subject;
  */
 public class RxBus {
 
+    public final static String ACTION_TOKEN_ERROR = "ACTION_TOKEN_ERROR";
+
     private static class SingletonHolder {
         private static final RxBus INSTANCE = new RxBus();
     }

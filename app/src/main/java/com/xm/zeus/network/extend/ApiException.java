@@ -1,22 +1,36 @@
 package com.xm.zeus.network.extend;
 
 /**
- * Created by lvxia on 2016-03-22.
+ * 数据请求错误 当code为 Network.ResultCode 时触发。
  */
-public class ApiException extends RuntimeException {
+public class ApiException extends Throwable {
 
-    public ApiException() {
+    private int errorCode;
+    private String errorMsg;
+
+    public ApiException(int errorCode, String errorMsg) {
+        this.errorCode = errorCode;
+        this.errorMsg = errorMsg;
     }
 
-    public ApiException(String detailMessage) {
-        super(detailMessage);
+    public int getErrorCode() {
+        return errorCode;
     }
 
-    public ApiException(String detailMessage, Throwable throwable) {
-        super(detailMessage, throwable);
+    public void setErrorCode(int errorCode) {
+        this.errorCode = errorCode;
     }
 
-    public ApiException(Throwable throwable) {
-        super(throwable);
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
+    }
+
+    @Override
+    public String toString() {
+        return "ErrorCode " + errorCode + " , ErrorMsg " + errorMsg;
     }
 }

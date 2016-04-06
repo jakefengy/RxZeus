@@ -21,8 +21,6 @@ public class LoginPresenterImpl implements ILoginPresenter {
     private LoginInteractorImpl interactor;
     private Context loginContext;
 
-    private ApiSubscriber<User> busSubscriber;
-
     private TimeStampHelper timeStampHelper;
 
     public LoginPresenterImpl(Context ctx, final ILoginView loginView) {
@@ -31,43 +29,34 @@ public class LoginPresenterImpl implements ILoginPresenter {
         this.interactor = new LoginInteractorImpl();
         timeStampHelper = new TimeStampHelper();
 
-        busSubscriber = new ApiSubscriber<User>() {
+    }
+
+    @Override
+    public void login(String username, String psw, String org, String appKey) {
+        if (interactor.checkUserName(username)) {
+            toError("用户名有问题");
+            return;
+        }
+        if (interactor.checkPassword(psw)) {
+            toError("密码有问题");
+            return;
+        }
+        if (!interactor.checkNet(loginContext)) {
+            toError("网络有问题");
+            return;
+        }
+        interactor.loginToBusiness(username, psw, org, appKey, new ApiSubscriber<User>() {
             @Override
             public void onNext(User user) {
                 loginToXmpp(user);
             }
 
             @Override
-            public void onCompleted() {
-
+            protected void onCommonError(Throwable e) {
+                toError(e.toString());
             }
 
-            @Override
-            protected void onApiError(Throwable e) {
-                loginView.error(e.getMessage());
-            }
-        };
-
-    }
-
-    @Override
-    public void login(String username, String psw, String org, String appKey) {
-        if (interactor.checkUserName(username)) {
-            if (loginView != null)
-                loginView.error("用户名有问题");
-            return;
-        }
-        if (interactor.checkPassword(psw)) {
-            if (loginView != null)
-                loginView.error("密码有问题");
-            return;
-        }
-        if (!interactor.checkNet(loginContext)) {
-            if (loginView != null)
-                loginView.error("网络有问题");
-            return;
-        }
-        interactor.loginToBusiness(username, psw, org, appKey, busSubscriber);
+        });
     }
 
     private void loginToXmpp(final User user) {
@@ -79,9 +68,7 @@ public class LoginPresenterImpl implements ILoginPresenter {
 
             @Override
             public void onFail(Throwable e) {
-                if (loginView != null) {
-                    loginView.error(e.toString());
-                }
+                toError(e.toString());
             }
         });
     }
@@ -99,8 +86,7 @@ public class LoginPresenterImpl implements ILoginPresenter {
             }
 
             @Override
-            public void onApiError(Throwable e) {
-                super.onError(e);
+            public void onCommonError(Throwable e) {
                 Logger.i(TAG, "downloadContacts.error");
                 if (loginView != null) {
                     loginView.toHome();
@@ -124,8 +110,11 @@ public class LoginPresenterImpl implements ILoginPresenter {
     @Override
     public void onDestroy() {
         loginView = null;
-        if (busSubscriber != null && busSubscriber.isUnsubscribed()) {
-            busSubscriber.unsubscribe();
-        }
     }
+
+    private void toError(String msg) {
+        if (loginView != null)
+            loginView.error(msg);
+    }
+
 }
