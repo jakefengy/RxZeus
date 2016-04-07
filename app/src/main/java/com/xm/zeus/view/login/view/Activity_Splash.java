@@ -8,6 +8,7 @@ import com.xm.zeus.R;
 import com.xm.zeus.utils.Logger;
 import com.xm.zeus.utils.RxBus;
 import com.xm.zeus.utils.entity.rxbus.TokenError;
+import com.xm.zeus.view.home.view.Activity_Home;
 import com.xm.zeus.view.login.iview.ISplashView;
 import com.xm.zeus.view.login.presenter.ISplashPresenter;
 import com.xm.zeus.view.login.presenter.SplashPresenterImpl;
@@ -54,7 +55,11 @@ public class Activity_Splash extends AppCompatActivity implements ISplashView {
 
     @Override
     public void toHome() {
-        Logger.i(TAG, "toHome");
+
+        Intent loginIntent = Activity_Home.getHomeIntent(Activity_Splash.this);
+        startActivity(loginIntent);
+        finish();
+
     }
 
     @Override

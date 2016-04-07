@@ -35,6 +35,7 @@ public class Activity_Home extends AppCompatActivity {
 
     public static Intent getHomeIntent(Context context) {
         Intent intent = new Intent();
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.setClass(context, Activity_Home.class);
         return intent;
     }
@@ -50,6 +51,7 @@ public class Activity_Home extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar.setTitle("微微助理");
+        setSupportActionBar(toolbar);
     }
 
     private void initTabPager() {
@@ -82,7 +84,7 @@ public class Activity_Home extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
 }

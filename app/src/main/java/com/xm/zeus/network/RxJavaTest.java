@@ -1174,6 +1174,8 @@ public class RxJavaTest {
 
     }
 
+    // App Test
+
     private static void compose() {
 
         System.out.println("---------------user-----------------");
@@ -1222,10 +1224,61 @@ public class RxJavaTest {
 
     }
 
+    private static void compostTwo() {
+        Observable
+                .just(1)
+                .map(new Func1<Integer, String>() {
+                    @Override
+                    public String call(Integer integer) {
+                        return "This is ob1";
+                    }
+                })
+                .flatMap(new Func1<String, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(String s) {
+                        System.out.println(s);
+                        return Observable.just(1).map(new Func1<Integer, String>() {
+                            @Override
+                            public String call(Integer integer) {
+                                return "This is ob2";
+                            }
+                        });
+                    }
+                })
+                .flatMap(new Func1<String, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(String s) {
+                        System.out.println(s);
+                        return Observable.just(1).map(new Func1<Integer, String>() {
+                            @Override
+                            public String call(Integer integer) {
+                                return "This is ob3";
+                            }
+                        });
+                    }
+                })
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("onError " + e.toString());
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        System.out.println("onNext " + s);
+                    }
+                });
+
+    }
 
     public static void main(String[] args) {
 
-        compose();
+        compostTwo();
     }
 
 

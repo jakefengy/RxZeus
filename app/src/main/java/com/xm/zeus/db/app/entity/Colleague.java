@@ -269,6 +269,19 @@ public class Colleague {
     }
 
     // KEEP METHODS - put your custom methods here
+
+    public String getDefaultDeptName() {
+        List<ColleagueDept> depts = getPersonDepts();
+        if (depts != null && depts.size() > 0) {
+            for (ColleagueDept dept : depts) {
+                if (dept.getIsdefault() == 1) {
+                    return dept.getName();
+                }
+            }
+        }
+
+        return "";
+    }
     // KEEP METHODS END
 
 }

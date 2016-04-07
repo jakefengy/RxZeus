@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/actionbar_base"
+    android:layout_height="@dimen/height_4xm">
+
+    <RelativeLayout
+        android:id="@+id/ly_contacts_head"
+        android:layout_width="@dimen/width_4xm"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/iv_contacts_head"
+            android:layout_width="@dimen/height_xm"
+            android:layout_height="@dimen/height_xm"
+            android:layout_centerInParent="true"
+            app:failureImage="?attr/contacts_head_man"
+            app:placeholderImage="?attr/contacts_head_man"
+            app:progressBarImage="?attr/contacts_head_man"
+            app:roundAsCircle="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/ly_contacts_head"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_contacts_name"
+            style="@style/tv_commom"
+            android:singleLine="true"
+            android:text="阿凡达" />
+
+        <TextView
+            android:id="@+id/tv_contacts_org"
+            style="@style/tv_remind"
+            android:layout_marginBottom="0dp"
+            android:text="研发部-普杰信息" />
+    </LinearLayout>
+
+</RelativeLayout>

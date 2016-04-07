@@ -275,7 +275,7 @@ public class LoginInteractorImpl implements ILoginInteractor {
     private boolean processGroup(List<Group> groups) {
         try {
 
-            if (groups != null) {
+            if (groups == null) {
                 return true;
             }
 
