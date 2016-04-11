@@ -2,7 +2,8 @@ package com.xm.zeus.utils;
 
 
 import com.xm.zeus.db.app.entity.Friend;
-import com.xm.zeus.db.user.entity.User;
+import com.xm.zeus.db.app.entity.User;
+
 
 import rx.Observable;
 import rx.functions.Action1;

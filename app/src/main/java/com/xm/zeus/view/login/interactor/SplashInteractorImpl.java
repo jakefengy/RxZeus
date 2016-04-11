@@ -8,12 +8,12 @@ import com.xm.zeus.db.app.entity.Colleague;
 import com.xm.zeus.db.app.entity.Friend;
 import com.xm.zeus.db.app.entity.Group;
 import com.xm.zeus.db.app.entity.Org;
+import com.xm.zeus.db.app.entity.User;
 import com.xm.zeus.db.app.helper.ColleagueHelper;
 import com.xm.zeus.db.app.helper.FriendHelper;
 import com.xm.zeus.db.app.helper.GroupHelper;
 import com.xm.zeus.db.app.helper.OrgHelper;
-import com.xm.zeus.db.user.entity.User;
-import com.xm.zeus.db.user.helper.UserHelper;
+import com.xm.zeus.db.app.helper.UserHelper;
 import com.xm.zeus.network.Network;
 import com.xm.zeus.network.extend.ApiSubscriber;
 import com.xm.zeus.utils.Logger;
@@ -105,43 +105,28 @@ public class SplashInteractorImpl implements ISplashInteractor {
         Network.getZeusApis().getColleague(user.getToken(), user.getUserId(), Constant.Organization, colleagueTS, "false")
                 .subscribeOn(Schedulers.io())
                 .compose(Network.<List<Colleague>>check())
-                .map(new Func1<List<Colleague>, Boolean>() {
+                .flatMap(new Func1<List<Colleague>, Observable<List<Friend>>>() {
                     @Override
-                    public Boolean call(List<Colleague> colleagues) {
-                        return processColleague(colleagues);
-                    }
-                })
-                .compose(new Observable.Transformer<Boolean, Boolean>() {
-                    @Override
-                    public Observable<Boolean> call(Observable<Boolean> booleanObservable) {
+                    public Observable<List<Friend>> call(List<Colleague> colleagueList) {
+                        processColleague(colleagueList);
                         return Network.getZeusApis().getFriends(user.getToken(), user.getUserId(), Constant.Organization, friendTS, "false")
                                 .subscribeOn(Schedulers.io())
-                                .compose(Network.<List<Friend>>check())
-                                .map(new Func1<List<Friend>, Boolean>() {
-                                    @Override
-                                    public Boolean call(List<Friend> friends) {
-                                        return processFriend(friends);
-                                    }
-                                });
+                                .compose(Network.<List<Friend>>check());
                     }
                 })
-                .compose(new Observable.Transformer<Boolean, Boolean>() {
+                .flatMap(new Func1<List<Friend>, Observable<Org>>() {
                     @Override
-                    public Observable<Boolean> call(Observable<Boolean> booleanObservable) {
+                    public Observable<Org> call(List<Friend> friends) {
+                        processFriend(friends);
                         return Network.getZeusApis().getOrgs(user.getToken(), user.getUserId(), Constant.Organization)
                                 .subscribeOn(Schedulers.io())
-                                .compose(Network.<Org>check())
-                                .map(new Func1<Org, Boolean>() {
-                                    @Override
-                                    public Boolean call(Org org) {
-                                        return processOrg(org);
-                                    }
-                                });
+                                .compose(Network.<Org>check());
                     }
                 })
-                .compose(new Observable.Transformer<Boolean, Boolean>() {
+                .flatMap(new Func1<Org, Observable<Boolean>>() {
                     @Override
-                    public Observable<Boolean> call(Observable<Boolean> booleanObservable) {
+                    public Observable<Boolean> call(Org org) {
+                        processOrg(org);
                         return Network.getZeusApis().getGroup(user.getToken(), user.getUserId(), Constant.Organization)
                                 .subscribeOn(Schedulers.io())
                                 .compose(Network.<List<Group>>check())
@@ -174,14 +159,11 @@ public class SplashInteractorImpl implements ISplashInteractor {
 
                 } else { // 新增或修改
 
-                    String selling = pinYin.toPinYin(colleague.getUsername());
-                    String firstLetter = selling.substring(0, 1).toUpperCase(Locale.getDefault());
+                    String selling = pinYin.toPinYin(colleague.getUsername()).toUpperCase(Locale.getDefault());
+                    String firstLetter = selling.substring(0, 1);
                     colleague.setSpelling(selling);
                     colleague.setFirstletter(firstLetter);
                     colleague.setTimestamp(System.currentTimeMillis());
-                    colleague.setHeadName("同事");
-                    colleague.setIsCheck(false);
-                    colleague.setDataType(Colleague.DATATYPE_COLLEAGUE);
 
                     personHelper.saveOrUpdate(colleague);
                 }

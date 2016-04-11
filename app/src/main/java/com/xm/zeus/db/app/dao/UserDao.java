@@ -1,10 +1,10 @@
-package com.xm.zeus.db.user.dao;
+package com.xm.zeus.db.app.dao;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
-import com.xm.zeus.db.user.entity.User;
+import com.xm.zeus.db.app.entity.User;
 
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;

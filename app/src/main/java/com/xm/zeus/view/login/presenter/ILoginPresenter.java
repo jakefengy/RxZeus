@@ -1,7 +1,7 @@
 package com.xm.zeus.view.login.presenter;
 
 
-import com.xm.zeus.db.user.entity.User;
+import com.xm.zeus.db.app.entity.User;
 
 public interface ILoginPresenter {
 

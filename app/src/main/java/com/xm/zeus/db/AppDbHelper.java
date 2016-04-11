@@ -12,10 +12,8 @@ import com.xm.zeus.db.app.dao.DaoSession;
 public class AppDbHelper {
 
     protected final static String APP_DB_NAME = "ZeusDB.db";
-    private final static String USER_DB_NAME = "UserDB";
     private Context appContext;
     private DaoSession daoSession;
-    private com.xm.zeus.db.user.dao.DaoSession userSession;
 
     private AppDbHelper() {
 
@@ -52,28 +50,7 @@ public class AppDbHelper {
 
     }
 
-    public com.xm.zeus.db.user.dao.DaoSession getUserDaoSession() {
-
-        if (userSession == null) {
-            createUserSession();
-        }
-
-        return userSession;
-    }
-
-    private void createUserSession() {
-        if (appContext == null) {
-            throw new NullPointerException("GreenDao.appContext == null , call init(Context) first .");
-        }
-
-        com.xm.zeus.db.user.dao.DaoMaster.DevOpenHelper openHelper = new com.xm.zeus.db.user.dao.DaoMaster.DevOpenHelper(appContext, USER_DB_NAME, null);
-        SQLiteDatabase db = openHelper.getWritableDatabase();
-        userSession = new com.xm.zeus.db.user.dao.DaoMaster(db).newSession();
-
-    }
-
     public void resetDB() {
         daoSession = null;
-        userSession = null;
     }
 }

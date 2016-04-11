@@ -1,7 +1,7 @@
-package com.xm.zeus.db.user.entity;
+package com.xm.zeus.db.app.entity;
 
-import com.xm.zeus.db.user.dao.DaoSession;
-import com.xm.zeus.db.user.dao.UserDao;
+import com.xm.zeus.db.app.dao.DaoSession;
+import com.xm.zeus.db.app.dao.UserDao;
 
 import de.greenrobot.dao.DaoException;
 

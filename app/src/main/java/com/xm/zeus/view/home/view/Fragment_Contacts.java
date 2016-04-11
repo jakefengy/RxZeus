@@ -34,9 +34,9 @@ public class Fragment_Contacts extends Fragment implements IContactsView {
     @Bind(R.id.ll_org)
     LinearLayout llOrg;
     @Bind(R.id.rv_colleague)
-    RecyclerView rvColleague;
+    RecyclerView recyclerView;
     @Bind(R.id.contacts_letter)
-    RecyclerViewFastScroller contactsLetter;
+    RecyclerViewFastScroller fastScroller;
 
     // Presenter
     private IContactsPresenter presenter;
@@ -79,8 +79,9 @@ public class Fragment_Contacts extends Fragment implements IContactsView {
 
     private void initView() {
         adapter = new ColleagueAdapter(getActivity(), null);
-        rvColleague.setAdapter(adapter);
-        rvColleague.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
+
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
             @Override
             public void onLayoutChildren(final RecyclerView.Recycler recycler, final RecyclerView.State state) {
                 super.onLayoutChildren(recycler, state);
@@ -90,17 +91,17 @@ public class Fragment_Contacts extends Fragment implements IContactsView {
                     // this avoids trying to handle un-needed calls
                     if (firstVisibleItemPosition == -1)
                         //not initialized, or no items shown, so hide fast-scroller
-                        contactsLetter.setVisibility(View.GONE);
+                        fastScroller.setVisibility(View.GONE);
                     return;
                 }
                 final int lastVisibleItemPosition = findLastVisibleItemPosition();
                 int itemsShown = lastVisibleItemPosition - firstVisibleItemPosition + 1;
                 //if all items are shown, hide the fast-scroller
-                contactsLetter.setVisibility(adapter.getItemCount() > itemsShown ? View.VISIBLE : View.GONE);
+                fastScroller.setVisibility(adapter.getItemCount() > itemsShown ? View.VISIBLE : View.GONE);
             }
         });
-        contactsLetter.setRecyclerView(rvColleague);
-        contactsLetter.setViewsToUse(R.layout.handle_fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
+        fastScroller.setRecyclerView(recyclerView);
+        fastScroller.setViewsToUse(R.layout.handle_fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
 
         adapter.setOnItemClickListener(new ColleagueAdapter.OnItemClickListener() {
             @Override

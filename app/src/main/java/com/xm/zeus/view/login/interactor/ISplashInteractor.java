@@ -2,7 +2,8 @@ package com.xm.zeus.view.login.interactor;
 
 import android.content.Context;
 
-import com.xm.zeus.db.user.entity.User;
+
+import com.xm.zeus.db.app.entity.User;
 import com.xm.zeus.network.extend.ApiSubscriber;
 
 /**

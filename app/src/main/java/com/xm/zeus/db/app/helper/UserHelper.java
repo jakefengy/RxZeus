@@ -1,10 +1,11 @@
-package com.xm.zeus.db.user.helper;
+package com.xm.zeus.db.app.helper;
 
 import android.text.TextUtils;
 
 import com.xm.zeus.db.AppDbHelper;
-import com.xm.zeus.db.user.dao.UserDao;
-import com.xm.zeus.db.user.entity.User;
+import com.xm.zeus.db.app.dao.UserDao;
+import com.xm.zeus.db.app.entity.User;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class UserHelper {
     private UserDao userDao;
 
     public UserHelper() {
-        userDao = AppDbHelper.getInstance().getUserDaoSession().getUserDao();
+        userDao = AppDbHelper.getInstance().getAppDaoSession().getUserDao();
     }
 
     public List<User> getUsers() {

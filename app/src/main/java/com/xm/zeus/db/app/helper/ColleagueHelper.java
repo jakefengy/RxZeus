@@ -48,7 +48,7 @@ public class ColleagueHelper {
                 .buildDelete()
                 .executeDeleteWithoutDetachingEntities();
 
-        List<ColleagueDept> depts = person.getPersonDepts();
+        List<ColleagueDept> depts = findDeptByPersonId(person.getUid());
         if (depts != null && depts.size() > 0) {
             for (ColleagueDept dept : depts) {
                 dept.setPersonId(person.getUid());
@@ -84,7 +84,9 @@ public class ColleagueHelper {
     public List<Colleague> findAll() {
         List<Colleague> results = new ArrayList<>();
 
-        List<Colleague> find = personDao.loadAll();
+        List<Colleague> find = personDao.queryBuilder()
+                .orderAsc(ColleagueDao.Properties.Spelling)
+                .list();
         if (find != null && find.size() > 0)
             results.addAll(find);
 
@@ -122,6 +124,27 @@ public class ColleagueHelper {
         }
         cursor.close();
         return personDao.queryBuilder().where(ColleagueDao.Properties.Uid.in(uids)).list();
+
+    }
+
+    // Person Dept
+
+    public List<ColleagueDept> findDeptByPersonId(String userId) {
+        return personDeptDao.queryBuilder()
+                .where(ColleagueDeptDao.Properties.PersonId.eq(userId))
+                .list();
+    }
+
+    public ColleagueDept getDefaultDeptByPersonId(String userId) {
+
+        QueryBuilder qb = personDeptDao.queryBuilder()
+                .where(ColleagueDeptDao.Properties.PersonId.eq(userId), ColleagueDeptDao.Properties.Isdefault.eq(1));
+        List<ColleagueDept> find = qb.list();
+
+        if (find != null && find.size() > 0) {
+            return find.get(0);
+        }
+        return null;
 
     }
 

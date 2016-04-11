@@ -1,9 +1,9 @@
 package com.xm.zeus.network;
 
 import com.xm.zeus.db.app.entity.Friend;
-import com.xm.zeus.db.user.entity.User;
+
+import com.xm.zeus.db.app.entity.User;
 import com.xm.zeus.network.entity.BaseEntity;
-import com.xm.zeus.network.extend.ApiException;
 import com.xm.zeus.network.extend.ApiSubscriber;
 
 import java.util.ArrayList;

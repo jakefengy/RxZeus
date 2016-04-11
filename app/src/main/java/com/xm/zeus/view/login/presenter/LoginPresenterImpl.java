@@ -3,8 +3,8 @@ package com.xm.zeus.view.login.presenter;
 import android.content.Context;
 
 import com.xm.zeus.db.app.entity.TimeStamp;
+import com.xm.zeus.db.app.entity.User;
 import com.xm.zeus.db.app.helper.TimeStampHelper;
-import com.xm.zeus.db.user.entity.User;
 import com.xm.zeus.network.extend.ApiSubscriber;
 import com.xm.zeus.utils.Logger;
 import com.xm.zeus.view.login.interactor.ILoginInteractor;

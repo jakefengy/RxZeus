@@ -31,6 +31,9 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.xm.zeus.R;
 import com.xm.zeus.app.Constant;
 import com.xm.zeus.db.app.entity.Colleague;
+import com.xm.zeus.db.app.entity.ColleagueDept;
+import com.xm.zeus.db.app.helper.ColleagueHelper;
+import com.xm.zeus.extend.RecyclerViewFastScroller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +42,13 @@ import java.util.List;
 /**
  * ColleagueAdapter For Fragment_Colleague RecyclerView
  */
-public class ColleagueAdapter extends RecyclerView.Adapter<ColleagueAdapter.ViewHolder> {
+public class ColleagueAdapter extends RecyclerView.Adapter<ColleagueAdapter.ViewHolder> implements RecyclerViewFastScroller.BubbleTextGetter {
 
     private final Context mActivity;
     private List<Colleague> mDataSource;
     private OnItemClickListener mItemClickListener;
+
+    private ColleagueHelper colleagueHelper;
 
     public ColleagueAdapter(Context context, List<Colleague> colleagueList) {
         this.mActivity = context;
@@ -51,6 +56,8 @@ public class ColleagueAdapter extends RecyclerView.Adapter<ColleagueAdapter.View
         if (colleagueList != null) {
             mDataSource.addAll(colleagueList);
         }
+
+        colleagueHelper = new ColleagueHelper();
     }
 
     @Override
@@ -64,7 +71,12 @@ public class ColleagueAdapter extends RecyclerView.Adapter<ColleagueAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         Colleague colleague = mDataSource.get(position);
         holder.vName.setText(colleague.getUsername());
-        holder.vDepartment.setText(colleague.getDefaultDeptName());
+        ColleagueDept dept = colleagueHelper.getDefaultDeptByPersonId(colleague.getUid());
+        if (dept == null) {
+            holder.vDepartment.setText("");
+        } else {
+            holder.vDepartment.setText(dept.getName());
+        }
 
         Uri imageUri = Uri.parse(Constant.ImageUrl + colleague.getAvatarid());
         holder.vAvatar.setImageURI(imageUri);
@@ -138,4 +150,8 @@ public class ColleagueAdapter extends RecyclerView.Adapter<ColleagueAdapter.View
         }
     }
 
+    @Override
+    public String getTextToShowInBubble(int pos) {
+        return Character.toString(mDataSource.get(pos).getSpelling().charAt(0));
+    }
 }

@@ -17,17 +17,32 @@ public class AppGenerator {
 
         Schema schema = new Schema(1, "com.xm.zeus.db.app.entity");
 
+//        addUser(schema);
         addColleague(schema);
-        addFriend(schema);
-        addGroupAndMembers(schema);
-        addTimeStamp(schema);
-        addOrg(schema);
-        addSetting(schema);
+//        addFriend(schema);
+//        addGroupAndMembers(schema);
+//        addTimeStamp(schema);
+//        addOrg(schema);
+//        addSetting(schema);
 
         schema.setDefaultJavaPackageDao("com.xm.zeus.db.app.dao");
         schema.enableKeepSectionsByDefault();
         schema.enableActiveEntitiesByDefault();
         new DaoGenerator().generateAll(schema, "./dbgenerator/src/main/java");
+    }
+
+    private static void addUser(Schema schema) {
+        Entity user = schema.addEntity("User");
+
+        user.setTableName("User");
+        user.addStringProperty("UserId").primaryKey();
+        user.addStringProperty("UserName");
+        user.addStringProperty("Password");
+        user.addStringProperty("Token");
+        user.addStringProperty("Org");
+        user.addBooleanProperty("Logged");
+        user.addBooleanProperty("AutoLogin");
+        user.addLongProperty("LoggedDate");
     }
 
     /**
@@ -40,23 +55,21 @@ public class AppGenerator {
 
         parent.setTableName("Colleague");
         parent.addStringProperty("uid").primaryKey();
-        parent.addStringProperty("uno");
         parent.addStringProperty("username");
         parent.addStringProperty("sex");
         parent.addStringProperty("mobile");
+        parent.addStringProperty("tel");
         parent.addStringProperty("email");
         parent.addStringProperty("avatarid");
         parent.addIntProperty("type");
+        parent.addLongProperty("timestamp");
+
         parent.addStringProperty("spelling");
         parent.addStringProperty("firstletter");
-        parent.addIntProperty("dataType");
-        parent.addStringProperty("headName");
-        parent.addBooleanProperty("isCheck");
-        parent.addLongProperty("timestamp");
 
         Entity dept = schema.addEntity("ColleagueDept");
         dept.setTableName("ColleagueDept");
-        dept.addStringProperty("no").primaryKey();
+        dept.addStringProperty("no");
         dept.addStringProperty("name");
         dept.addStringProperty("title");
         dept.addIntProperty("isdefault");
@@ -64,7 +77,7 @@ public class AppGenerator {
                 .getProperty();
 
         ToMany personDepts = parent.addToMany(dept, personId);
-        personDepts.setName("personDepts");
+        personDepts.setName("dept");
 
     }
 

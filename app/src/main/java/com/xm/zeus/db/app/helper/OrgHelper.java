@@ -22,7 +22,7 @@ public class OrgHelper {
             return;
         }
 
-        orgDao.insert(org);
+        orgDao.insertOrReplace(org);
     }
 
     /**
@@ -35,7 +35,7 @@ public class OrgHelper {
             return;
         }
 
-        orgDao.update(org);
+        orgDao.insertOrReplace(org);
     }
 
     /**
