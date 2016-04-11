@@ -37,7 +37,7 @@ public class FriendEditInteractorImpl implements IFriendEditInteractor {
         Observable.create(new Observable.OnSubscribe<Friend>() {
             @Override
             public void call(Subscriber<? super Friend> subscriber) {
-                RequestBody body = RequestBody.create(MediaType.parse("data"), new Gson().toJson(friend));
+                RequestBody body = RequestBody.create(MediaType.parse("text/plain"), new Gson().toJson(friend));
                 Network.getZeusApis().addFriend(Network.baseUrl + "addnewcontact", user.getToken(), user.getOrg(), user.getUserId(), body)
                         .subscribeOn(Schedulers.io())
                         .compose(Network.<AddFriendResult>check())
@@ -93,7 +93,7 @@ public class FriendEditInteractorImpl implements IFriendEditInteractor {
 
     @Override
     public void updateFriend(User user, final Friend friend, ApiSubscriber<Friend> subscriber) {
-        RequestBody body = RequestBody.create(MediaType.parse("data"), new Gson().toJson(friend));
+        RequestBody body = RequestBody.create(MediaType.parse("text/plain"), new Gson().toJson(friend));
         Network.getZeusApis().updateFriend(Network.baseUrl + "updatepersonalcontact", user.getToken(), user.getOrg(), user.getUserId(), body)
                 .subscribeOn(Schedulers.io())
                 .compose(Network.<UpdateFriendResult>check())
