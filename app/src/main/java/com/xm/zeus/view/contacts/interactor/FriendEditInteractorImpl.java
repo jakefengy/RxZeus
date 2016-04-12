@@ -114,24 +114,4 @@ public class FriendEditInteractorImpl implements IFriendEditInteractor {
                 .subscribe(subscriber);
     }
 
-    @Override
-    public void deleteFriend(User user, final String friendId, ApiSubscriber<String> subscriber) {
-        Network.getZeusApis().deleteFriend(user.getToken(), user.getUserId(), user.getOrg(), friendId)
-                .subscribeOn(Schedulers.io())
-                .compose(Network.<DeleteFriendResult>check())
-                .subscribeOn(Schedulers.io())
-                .flatMap(new Func1<DeleteFriendResult, Observable<String>>() {
-                    @Override
-                    public Observable<String> call(DeleteFriendResult result) {
-                        if (result == null || !result.getIsok()) {
-                            return Observable.error(new Throwable("好友删除失败"));
-                        }
-
-                        friendHelper.deleteById(friendId);
-                        return Observable.just(friendId);
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
-    }
 }

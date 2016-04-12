@@ -24,7 +24,8 @@
         <activity android:name=".view.login.view.Activity_Login" />
         <activity android:name=".view.home.view.Activity_Home" />
         <activity android:name=".view.contacts.view.Activity_Friends" />
-        <activity android:name=".view.contacts.view.Activity_Friend_Edit"></activity>
+        <activity android:name=".view.contacts.view.Activity_Friend_Edit" />
+        <activity android:name=".view.contacts.view.Activity_Person_View"></activity>
     </application>
 
 </manifest>

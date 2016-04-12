@@ -98,23 +98,6 @@ public class FriendEditPresenterImpl implements IFriendEditPresenter {
         });
     }
 
-    @Override
-    public void deleteFriend(String friendId) {
-        interactor.deleteFriend(userHelper.getLastLoggedUser(), friendId, new ApiSubscriber<String>() {
-            @Override
-            public void onNext(String friendId) {
-                if (friendEditView != null) {
-                    friendEditView.onDeleteComplete(friendId);
-                }
-            }
-
-            @Override
-            protected void onCommonError(Throwable e) {
-                error(e.toString());
-            }
-        });
-    }
-
     private void error(String msg) {
         if (friendEditView != null) {
             friendEditView.error(msg);

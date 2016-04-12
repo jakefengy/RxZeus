@@ -38,10 +38,6 @@ public class Activity_Friend_Edit extends AppCompatActivity implements IFriendEd
     TextInputEditText etFriendPost;
     @Bind(R.id.rl_action_bottom_save)
     RelativeLayout btnSave;
-    @Bind(R.id.rl_action_bottom_delete)
-    RelativeLayout btnDelete;
-    @Bind(R.id.rl_action_bottom_edit)
-    RelativeLayout btnEdit;
 
     private final static String ISADDFriend = "isAddFriend";
     private final static String FRIENDID = "friend_id";
@@ -84,21 +80,15 @@ public class Activity_Friend_Edit extends AppCompatActivity implements IFriendEd
         isAddFriend = getIntent().getBooleanExtra(ISADDFriend, true);
         friendId = getIntent().getStringExtra(FRIENDID);
 
-        if (isAddFriend) {
-            btnSave.setVisibility(View.VISIBLE);
-            btnDelete.setVisibility(View.GONE);
-            btnEdit.setVisibility(View.GONE);
-        } else {
-            btnSave.setVisibility(View.GONE);
-            btnDelete.setVisibility(View.VISIBLE);
-            btnEdit.setVisibility(View.VISIBLE);
-
+        if (!isAddFriend) {
             presenter.getFriend(friendId);
         }
 
+        btnSave.setVisibility(View.VISIBLE);
+
     }
 
-    @OnClick({R.id.rl_action_bottom_save, R.id.rl_action_bottom_delete, R.id.rl_action_bottom_edit})
+    @OnClick({R.id.rl_action_bottom_save})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rl_action_bottom_save:
@@ -109,21 +99,13 @@ public class Activity_Friend_Edit extends AppCompatActivity implements IFriendEd
                 friend.setCompany(String.valueOf(etFriendCompanyName.getText()));
                 friend.setDept(String.valueOf(etFriendDepartment.getText()));
                 friend.setPost(String.valueOf(etFriendPost.getText()));
-                presenter.addFriend(friend);
-                break;
-            case R.id.rl_action_bottom_delete:
-                presenter.deleteFriend(friendId);
-                break;
-            case R.id.rl_action_bottom_edit:
-                Friend friendUpdate = new Friend();
-                friendUpdate.setUid(friendId);
-                friendUpdate.setUsername(String.valueOf(etFriendName.getText()));
-                friendUpdate.setMobile(String.valueOf(etFriendPhone.getText()));
-                friendUpdate.setEmail(String.valueOf(etFriendEmail.getText()));
-                friendUpdate.setCompany(String.valueOf(etFriendCompanyName.getText()));
-                friendUpdate.setDept(String.valueOf(etFriendDepartment.getText()));
-                friendUpdate.setPost(String.valueOf(etFriendPost.getText()));
-                presenter.updateFriend(friendUpdate);
+
+                if (isAddFriend) {
+                    presenter.addFriend(friend);
+                } else {
+                    friend.setUid(friendId);
+                    presenter.updateFriend(friend);
+                }
                 break;
         }
     }

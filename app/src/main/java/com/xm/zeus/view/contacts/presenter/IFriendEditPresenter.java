@@ -16,8 +16,5 @@ public interface IFriendEditPresenter {
 
     void updateFriend(Friend friend);
 
-    void deleteFriend(String friendId);
-
-
     void onDestroy();
 }

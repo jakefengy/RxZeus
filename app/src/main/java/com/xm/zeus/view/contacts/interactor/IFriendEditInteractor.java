@@ -20,6 +20,4 @@ public interface IFriendEditInteractor {
 
     void updateFriend(User user, Friend friend, ApiSubscriber<Friend> subscriber);
 
-    void deleteFriend(User user, String friendId, ApiSubscriber<String> subscriber);
-
 }

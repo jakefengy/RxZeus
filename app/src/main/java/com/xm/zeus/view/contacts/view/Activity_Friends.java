@@ -107,7 +107,7 @@ public class Activity_Friends extends AppCompatActivity implements IFriendView {
         adapter.setOnItemClickListener(new FriendAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, Friend friend) {
-                Intent intent = Activity_Friend_Edit.getIntent(Activity_Friends.this, false, friend.getUid());
+                Intent intent = Activity_Person_View.getIntent(Activity_Friends.this, Activity_Person_View.Type.Friend, friend.getUid());
                 startActivity(intent);
             }
         });

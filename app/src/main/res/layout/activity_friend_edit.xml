@@ -95,45 +95,6 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/rl_action_bottom_delete"
-            style="@style/actionbar_bottom_ripplelayout">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <ImageView
-                    style="@style/iv_bottom"
-                    android:src="?attr/icon_delete" />
-
-                <TextView
-                    style="@style/tv_ripple_bottom"
-                    android:text="@string/actionbar_bottom_delete" />
-            </LinearLayout>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_action_bottom_edit"
-            style="@style/actionbar_bottom_ripplelayout">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <ImageView
-                    style="@style/iv_bottom"
-                    android:src="?attr/icon_modify" />
-
-                <TextView
-                    style="@style/tv_ripple_bottom"
-                    android:text="@string/actionbar_bottom_edit" />
-            </LinearLayout>
-
-        </RelativeLayout>
-
     </LinearLayout>
 
 </RelativeLayout>
