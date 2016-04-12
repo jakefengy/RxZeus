@@ -107,7 +107,8 @@ public class Activity_Friends extends AppCompatActivity implements IFriendView {
         adapter.setOnItemClickListener(new FriendAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, Friend friend) {
-                Tip.toast(Activity_Friends.this, "To friend detail");
+                Intent intent = Activity_Friend_Edit.getIntent(Activity_Friends.this, false, friend.getUid());
+                startActivity(intent);
             }
         });
 
@@ -143,7 +144,8 @@ public class Activity_Friends extends AppCompatActivity implements IFriendView {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Tip.toast(Activity_Friends.this, "add friend");
+        Intent intent = Activity_Friend_Edit.getIntent(Activity_Friends.this, true, null);
+        startActivity(intent);
         return true;
     }
 

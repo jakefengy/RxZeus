@@ -21,7 +21,7 @@ import rx.functions.Func1;
  */
 public class Network {
 
-    private String baseUrl = "http://120.24.247.177:8080/open/";
+    public final static String baseUrl = "http://120.24.247.177:8080/open/";
 
     public static class ResultCode {
         public static final int RESULT_OK = 0;
