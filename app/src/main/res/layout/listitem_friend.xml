@@ -16,10 +16,9 @@
             android:layout_width="@dimen/height_xm"
             android:layout_height="@dimen/height_xm"
             android:layout_centerInParent="true"
-            app:failureImage="?attr/contacts_head_man"
-            app:placeholderImage="?attr/contacts_head_man"
-            app:progressBarImage="?attr/contacts_head_man"
-            app:roundAsCircle="true" />
+            app:failureImage="?attr/contacts_head_card"
+            app:placeholderImage="?attr/contacts_head_card"
+            app:progressBarImage="?attr/contacts_head_card" />
     </RelativeLayout>
 
     <LinearLayout

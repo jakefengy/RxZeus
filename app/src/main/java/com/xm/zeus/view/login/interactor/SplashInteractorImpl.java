@@ -195,8 +195,6 @@ public class SplashInteractorImpl implements ISplashInteractor {
                     friend.setSpelling(selling);
                     friend.setFirstLetter(firstLetter);
                     friend.setTimestamp(System.currentTimeMillis());
-                    friend.setHeadName("名片夹");
-                    friend.setDataType(Friend.DATATYPE_FRIEND);
                     friendHelper.saveOrUpdate(friend);
                 }
             }

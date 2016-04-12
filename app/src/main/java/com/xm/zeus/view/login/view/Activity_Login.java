@@ -31,7 +31,7 @@ public class Activity_Login extends AppCompatActivity implements ILoginView {
     @Bind(R.id.login_btn_login)
     Button loginBtnLogin;
 
-    public static Intent getLoginIntent(Context context) {
+    public static Intent getIntent(Context context) {
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.setClass(context, Activity_Login.class);

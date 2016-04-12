@@ -1,5 +1,6 @@
 package com.xm.zeus.view.home.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import com.xm.zeus.R;
 import com.xm.zeus.db.app.entity.Colleague;
 import com.xm.zeus.extend.RecyclerViewFastScroller;
 import com.xm.zeus.utils.Tip;
+import com.xm.zeus.view.contacts.view.Activity_Friends;
 import com.xm.zeus.view.home.adapter.ColleagueAdapter;
 import com.xm.zeus.view.home.iview.IContactsView;
 import com.xm.zeus.view.home.presenter.ContactsPresenterImpl;
@@ -35,7 +37,7 @@ public class Fragment_Contacts extends Fragment implements IContactsView {
     LinearLayout llOrg;
     @Bind(R.id.rv_colleague)
     RecyclerView recyclerView;
-    @Bind(R.id.contacts_letter)
+    @Bind(R.id.friend_fast_scroller)
     RecyclerViewFastScroller fastScroller;
 
     // Presenter
@@ -126,7 +128,7 @@ public class Fragment_Contacts extends Fragment implements IContactsView {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_name_card:
-                Tip.toast(getActivity(), "to friend");
+                toPage(Activity_Friends.getIntent(getActivity()));
                 break;
             case R.id.ll_talk_group:
                 Tip.toast(getActivity(), "to group");
@@ -135,5 +137,9 @@ public class Fragment_Contacts extends Fragment implements IContactsView {
                 Tip.toast(getActivity(), "to org");
                 break;
         }
+    }
+
+    private void toPage(Intent intent) {
+        startActivity(intent);
     }
 }

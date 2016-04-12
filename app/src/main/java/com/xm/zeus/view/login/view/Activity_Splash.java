@@ -41,7 +41,7 @@ public class Activity_Splash extends AppCompatActivity implements ISplashView {
                 .subscribe(new Action1<TokenError>() {
                     @Override
                     public void call(TokenError tokenError) {
-                        Intent intent = Activity_Login.getLoginIntent(Activity_Splash.this);
+                        Intent intent = Activity_Login.getIntent(Activity_Splash.this);
                         startActivity(intent);
                         finish();
                     }
@@ -65,7 +65,7 @@ public class Activity_Splash extends AppCompatActivity implements ISplashView {
     @Override
     public void toLogin() {
         Logger.i(TAG, "toLogin");
-        Intent loginIntent = Activity_Login.getLoginIntent(Activity_Splash.this);
+        Intent loginIntent = Activity_Login.getIntent(Activity_Splash.this);
         startActivity(loginIntent);
         finish();
     }

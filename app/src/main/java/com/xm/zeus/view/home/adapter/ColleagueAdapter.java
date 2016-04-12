@@ -20,11 +20,9 @@ package com.xm.zeus.view.home.adapter;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -105,9 +103,9 @@ public class ColleagueAdapter extends RecyclerView.Adapter<ColleagueAdapter.View
 
         public ViewHolder(View view) {
             super(view);
-            vName = (TextView) view.findViewById(R.id.tv_contacts_name);
-            vDepartment = (TextView) view.findViewById(R.id.tv_contacts_org);
-            vAvatar = (SimpleDraweeView) view.findViewById(R.id.iv_contacts_head);
+            vName = (TextView) view.findViewById(R.id.tv_friend_name);
+            vDepartment = (TextView) view.findViewById(R.id.tv_friend_org);
+            vAvatar = (SimpleDraweeView) view.findViewById(R.id.iv_friend_head);
 
             view.setOnClickListener(this);
         }

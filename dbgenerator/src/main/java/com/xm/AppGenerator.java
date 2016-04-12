@@ -18,8 +18,8 @@ public class AppGenerator {
         Schema schema = new Schema(1, "com.xm.zeus.db.app.entity");
 
 //        addUser(schema);
-        addColleague(schema);
-//        addFriend(schema);
+//        addColleague(schema);
+        addFriend(schema);
 //        addGroupAndMembers(schema);
 //        addTimeStamp(schema);
 //        addOrg(schema);
@@ -103,8 +103,6 @@ public class AppGenerator {
         parent.addIntProperty("type");
         parent.addStringProperty("spelling");
         parent.addStringProperty("firstLetter");
-        parent.addStringProperty("headName");
-        parent.addIntProperty("dataType");
         parent.addLongProperty("timestamp");
 
     }

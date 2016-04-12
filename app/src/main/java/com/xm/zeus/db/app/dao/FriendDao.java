@@ -37,9 +37,7 @@ public class FriendDao extends AbstractDao<Friend, String> {
         public final static Property Type = new Property(10, Integer.class, "type", false, "TYPE");
         public final static Property Spelling = new Property(11, String.class, "spelling", false, "SPELLING");
         public final static Property FirstLetter = new Property(12, String.class, "firstLetter", false, "FIRST_LETTER");
-        public final static Property HeadName = new Property(13, String.class, "headName", false, "HEAD_NAME");
-        public final static Property DataType = new Property(14, Integer.class, "dataType", false, "DATA_TYPE");
-        public final static Property Timestamp = new Property(15, Long.class, "timestamp", false, "TIMESTAMP");
+        public final static Property Timestamp = new Property(13, Long.class, "timestamp", false, "TIMESTAMP");
     };
 
     private DaoSession daoSession;
@@ -71,9 +69,7 @@ public class FriendDao extends AbstractDao<Friend, String> {
                 "\"TYPE\" INTEGER," + // 10: type
                 "\"SPELLING\" TEXT," + // 11: spelling
                 "\"FIRST_LETTER\" TEXT," + // 12: firstLetter
-                "\"HEAD_NAME\" TEXT," + // 13: headName
-                "\"DATA_TYPE\" INTEGER," + // 14: dataType
-                "\"TIMESTAMP\" INTEGER);"); // 15: timestamp
+                "\"TIMESTAMP\" INTEGER);"); // 13: timestamp
     }
 
     /** Drops the underlying database table. */
@@ -152,19 +148,9 @@ public class FriendDao extends AbstractDao<Friend, String> {
             stmt.bindString(13, firstLetter);
         }
  
-        String headName = entity.getHeadName();
-        if (headName != null) {
-            stmt.bindString(14, headName);
-        }
- 
-        Integer dataType = entity.getDataType();
-        if (dataType != null) {
-            stmt.bindLong(15, dataType);
-        }
- 
         Long timestamp = entity.getTimestamp();
         if (timestamp != null) {
-            stmt.bindLong(16, timestamp);
+            stmt.bindLong(14, timestamp);
         }
     }
 
@@ -197,9 +183,7 @@ public class FriendDao extends AbstractDao<Friend, String> {
             cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10), // type
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // spelling
             cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // firstLetter
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // headName
-            cursor.isNull(offset + 14) ? null : cursor.getInt(offset + 14), // dataType
-            cursor.isNull(offset + 15) ? null : cursor.getLong(offset + 15) // timestamp
+            cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13) // timestamp
         );
         return entity;
     }
@@ -220,9 +204,7 @@ public class FriendDao extends AbstractDao<Friend, String> {
         entity.setType(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
         entity.setSpelling(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
         entity.setFirstLetter(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setHeadName(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
-        entity.setDataType(cursor.isNull(offset + 14) ? null : cursor.getInt(offset + 14));
-        entity.setTimestamp(cursor.isNull(offset + 15) ? null : cursor.getLong(offset + 15));
+        entity.setTimestamp(cursor.isNull(offset + 13) ? null : cursor.getLong(offset + 13));
      }
     
     /** @inheritdoc */

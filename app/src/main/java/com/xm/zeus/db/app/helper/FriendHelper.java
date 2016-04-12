@@ -9,6 +9,8 @@ import com.xm.zeus.db.app.entity.Friend;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.dao.query.QueryBuilder;
+
 /**
  * 好友数据库操作
  */
@@ -69,7 +71,7 @@ public class FriendHelper {
 
     public List<Friend> findAll() {
         List<Friend> results = new ArrayList<>();
-        List<Friend> find = friendDao.loadAll();
+        List<Friend> find = friendDao.queryBuilder().orderAsc(FriendDao.Properties.Spelling).list();
         if (find != null && find.size() > 0) {
             results.addAll(find);
         }
