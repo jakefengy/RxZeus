@@ -37,7 +37,7 @@
     <string name="actionbar_bottom_history">联系记录</string>
     <string name="actionbar_bottom_save">保存</string>
     <string name="actionbar_bottom_send">发送名片</string>
-    <string name="actionbar_bottom_comfirm">确定</string>
+    <string name="actionbar_bottom_confirm">确定</string>
     <string name="actionbar_bottom_delete">删除</string>
     <string name="actionbar_bottom_edit">修改</string>
     <string name="actionbar_bottom_exit">退出讨论组</string>

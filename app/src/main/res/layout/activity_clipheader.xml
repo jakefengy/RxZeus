@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar_clip_header"
+        layout="@layout/toolbar" />
+
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/src_pic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter" />
+
+        <com.xm.zeus.extend.ClipView
+            android:id="@+id/clipView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_person_action_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_2xm"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/common_actionbar_bottom_bg"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rl_action_bottom_chat"
+            style="@style/actionbar_bottom_ripplelayout"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_actionbar_confirm"
+                    style="@style/iv_bottom"
+                    android:src="?attr/icon_add" />
+
+                <TextView
+                    style="@style/tv_ripple_bottom"
+                    android:text="@string/actionbar_bottom_confirm" />
+            </LinearLayout>
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

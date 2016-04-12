@@ -7,13 +7,16 @@ import com.xm.zeus.db.app.entity.Org;
 import com.xm.zeus.network.entity.BaseEntity;
 import com.xm.zeus.view.contacts.entity.AddFriendResult;
 import com.xm.zeus.view.contacts.entity.DeleteFriendResult;
+import com.xm.zeus.view.contacts.entity.UpdateAvatarResult;
 import com.xm.zeus.view.contacts.entity.UpdateFriendResult;
+import com.xm.zeus.view.contacts.entity.UploadAvatarResult;
 import com.xm.zeus.view.login.entity.LoginResult;
 import com.xm.zeus.view.home.entity.CheckVersionResult;
 import com.xm.zeus.view.home.entity.LoginOutResult;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
@@ -88,5 +91,20 @@ public interface ZeusApis {
     @GET("removecontact")
     Observable<BaseEntity<DeleteFriendResult>>
     deleteFriend(@Query("AccessToken") String token, @Query("uid") String uid, @Query("organization") String org, @Query("contactid") String contactid);
+
+    // 上传头像
+    @Multipart
+    @POST
+    Observable<BaseEntity<UploadAvatarResult>>
+    uploadAvatar(
+            @Url String url,
+            @Query("AccessToken") String token,
+            @Query("organization") String organization,
+            @Query("uid") String uid, @Part MultipartBody.Part file);
+
+    @GET("updateavatar")
+    Observable<BaseEntity<UpdateAvatarResult>>
+    updateAvatar(@Query("AccessToken") String token, @Query("uid") String uid, @Query("organization") String org,
+                 @Query("targetuid") String targetuid, @Query("targettype") String targettype, @Query("avatarid") String avatarid);
 
 }

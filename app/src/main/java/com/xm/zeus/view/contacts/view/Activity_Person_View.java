@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -17,15 +19,20 @@ import com.xm.zeus.app.Constant;
 import com.xm.zeus.db.app.entity.Colleague;
 import com.xm.zeus.db.app.entity.ColleagueDept;
 import com.xm.zeus.db.app.entity.Friend;
+import com.xm.zeus.db.app.entity.User;
 import com.xm.zeus.db.app.helper.ColleagueHelper;
+import com.xm.zeus.db.app.helper.UserHelper;
 import com.xm.zeus.utils.Tip;
 import com.xm.zeus.view.contacts.iview.IPersonView;
 import com.xm.zeus.view.contacts.presenter.IPersonPresenter;
 import com.xm.zeus.view.contacts.presenter.PersonPresenterImpl;
 
+import java.io.File;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.drakeet.materialdialog.MaterialDialog;
 
 public class Activity_Person_View extends AppCompatActivity implements IPersonView {
 
@@ -62,8 +69,10 @@ public class Activity_Person_View extends AppCompatActivity implements IPersonVi
 
     private final static String DATAFROM = "DATAFROM";
     private final static String DATAID = "DATAID";
+    private final static int Header_Code_Choose = 10;
+    private final static int Header_Code_Take = 11;
 
-    @OnClick({R.id.ly_usercard_phone, R.id.ly_usercard_email, R.id.rl_action_bottom_chat, R.id.rl_action_bottom_history, R.id.rl_action_bottom_delete, R.id.rl_action_bottom_edit})
+    @OnClick({R.id.iv_avatar, R.id.ly_usercard_phone, R.id.ly_usercard_email, R.id.rl_action_bottom_chat, R.id.rl_action_bottom_history, R.id.rl_action_bottom_delete, R.id.rl_action_bottom_edit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ly_usercard_phone:
@@ -84,6 +93,10 @@ public class Activity_Person_View extends AppCompatActivity implements IPersonVi
             case R.id.rl_action_bottom_edit:
                 Intent intent = Activity_Friend_Edit.getIntent(Activity_Person_View.this, false, personId);
                 startActivity(intent);
+                break;
+            case R.id.iv_avatar:
+                if (dataType == Type.Colleague)
+                    headerDialog.show();
                 break;
         }
     }
@@ -108,6 +121,15 @@ public class Activity_Person_View extends AppCompatActivity implements IPersonVi
     private String personId;
     private IPersonPresenter presenter;
 
+    private UserHelper userHelper;
+    private User currentUser;
+    private boolean isMe;
+
+    private MaterialDialog headerDialog;
+    private SimpleDraweeView ivHeaderAvatar;
+    private RelativeLayout rlHeaderChoose, rlHeaderTake;
+    private File headerTempFile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,12 +145,52 @@ public class Activity_Person_View extends AppCompatActivity implements IPersonVi
 
         personId = getIntent().getStringExtra(DATAID);
         presenter = new PersonPresenterImpl(this, this);
+        userHelper = new UserHelper();
+        currentUser = userHelper.getLastLoggedUser();
+        isMe = personId.equals(currentUser.getUserId());
 
         initView();
 
     }
 
     private void initView() {
+
+        View view = LayoutInflater.from(Activity_Person_View.this).inflate(R.layout.layout_pop_header, null);
+        ivHeaderAvatar = ButterKnife.findById(view, R.id.iv_header_avatar);
+        rlHeaderChoose = ButterKnife.findById(view, R.id.rl_header_pop_choose);
+        rlHeaderTake = ButterKnife.findById(view, R.id.rl_header_pop_take);
+
+        rlHeaderChoose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                headerDialog.dismiss();
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(Intent.createChooser(intent, "请选择图片"), Header_Code_Choose);
+            }
+        });
+
+        rlHeaderTake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                headerDialog.dismiss();
+                headerTempFile = new File(Constant.ImageCache, System.currentTimeMillis() + ".jpg");
+                if (!headerTempFile.getParentFile().exists()) {
+                    headerTempFile.getParentFile().mkdirs();
+                }
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(headerTempFile));
+                startActivityForResult(intent, Header_Code_Take);
+            }
+        });
+
+        headerDialog = new MaterialDialog(Activity_Person_View.this)
+                .setContentView(view)
+                .setCanceledOnTouchOutside(true);
+
+        if (!isMe) {
+            rlHeaderChoose.setVisibility(View.GONE);
+            rlHeaderTake.setVisibility(View.GONE);
+        }
 
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
@@ -164,6 +226,7 @@ public class Activity_Person_View extends AppCompatActivity implements IPersonVi
 
         Uri imageUri = Uri.parse(Constant.ImageUrl + friend.getAvatarid());
         ivAvatar.setImageURI(imageUri);
+        ivHeaderAvatar.setImageURI(imageUri);
 
     }
 
@@ -184,11 +247,39 @@ public class Activity_Person_View extends AppCompatActivity implements IPersonVi
 
         Uri imageUri = Uri.parse(Constant.ImageUrl + colleague.getAvatarid());
         ivAvatar.setImageURI(imageUri);
+        ivHeaderAvatar.setImageURI(imageUri);
     }
 
     @Override
     public void onError(String msg) {
         Tip.toast(Activity_Person_View.this, msg);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case Header_Code_Choose:
+                if (resultCode == RESULT_OK) {
+                    Uri uri = data.getData();
+                    starCropPhoto(uri);
+                }
+                break;
+            case Header_Code_Take:
+                if (resultCode == RESULT_OK) {
+                    starCropPhoto(Uri.fromFile(headerTempFile));
+                }
+                break;
+        }
+    }
+
+    private void starCropPhoto(Uri uri) {
+
+        if (uri == null) {
+            return;
+        }
+        Intent intent = Activity_ClipHeader.getIntent(Activity_Person_View.this, uri, currentUser.getUserId());
+        startActivity(intent);
+
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.xm.zeus.app;
 
+import android.os.Environment;
+
 /**
  * Created by lvxia on 2016-03-29.
  */
@@ -19,10 +21,23 @@ public class Constant {
 
     /**
      * 应用文件结构SD卡
-     *   --Zeus
-     *       --Image
-     *       --Network
-     *       --Other
+     * --Zeus
+     * ----Image
+     * ----Network
+     * ----Other
      */
+
+    private static final String sd = getAvailableCachePath();
+    public static final String ImageCache = sd + "Zeus/Image/";
+
+    private static String getAvailableCachePath() {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+
+            return App.instance.getExternalCacheDir().getPath() + "/Zeus/";
+        } else {
+            return App.instance.getCacheDir().getPath() + "/Zeus/";
+        }
+
+    }
 
 }

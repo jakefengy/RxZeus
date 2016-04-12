@@ -16,6 +16,7 @@ import com.xm.zeus.db.app.entity.Colleague;
 import com.xm.zeus.extend.RecyclerViewFastScroller;
 import com.xm.zeus.utils.Tip;
 import com.xm.zeus.view.contacts.view.Activity_Friends;
+import com.xm.zeus.view.contacts.view.Activity_Person_View;
 import com.xm.zeus.view.home.adapter.ColleagueAdapter;
 import com.xm.zeus.view.home.iview.IContactsView;
 import com.xm.zeus.view.home.presenter.ContactsPresenterImpl;
@@ -114,7 +115,8 @@ public class Fragment_Contacts extends Fragment implements IContactsView {
     }
 
     private void toDetial(Colleague colleague) {
-        Tip.toast(getActivity(), "to person detail");
+        Intent intent = Activity_Person_View.getIntent(getActivity(), Activity_Person_View.Type.Colleague, colleague.getUid());
+        startActivity(intent);
     }
 
     @Override
